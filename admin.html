@@ -290,7 +290,7 @@ async function loadBookings() {
     document.getElementById('st-total').textContent = data.length;
     document.getElementById('st-month').textContent = month;
     document.getElementById('st-week').textContent = week;
-  } catch(e) { tbody.innerHTML = '<tr><td colspan="7" style="color:#ef4444;">読み込み失敗</td></tr>'; }
+  } catch(e) { tbody.innerHTML = '<tr><td colspan="7" style="color:#ef4444;">読み込み失敗</td></tr>'; toast('⚠️ 予約データ読み込み失敗（環境変数を確認してください）'); }
 }
 
 // ===== WEEK TIMELINE =====
@@ -337,7 +337,7 @@ async function loadWeek() {
       const slots = await r.json();
       slots.forEach(s => { if(!tlData[s.date]) tlData[s.date]=[]; tlData[s.date].push(s); });
     }
-  } catch(e) {}
+  } catch(e) { toast('⚠️ 枠データ読み込み失敗（環境変数を確認してください）'); }
   clearSel();
   renderTimeline();
 }
