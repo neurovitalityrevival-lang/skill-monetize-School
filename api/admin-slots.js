@@ -1,11 +1,11 @@
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET,POST,DELETE,OPTIONS');
+  res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PATCH,DELETE,OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type,X-Admin-Password');
   if (req.method === 'OPTIONS') return res.status(200).end();
 
   const SUPABASE_URL = process.env.SUPABASE_URL;
-  const SUPABASE_KEY = process.env.SUPABASE_ANON_KEY;
+  const SUPABASE_KEY = process.env.SUPABASE_SERVICE_KEY;
   const ADMIN_PASS   = process.env.ADMIN_PASSWORD;
 
   if (req.headers['x-admin-password'] !== ADMIN_PASS)
@@ -41,6 +41,21 @@ export default async function handler(req, res) {
         Prefer: 'return=minimal,resolution=ignore-duplicates'
       },
       body: JSON.stringify(rows)
+    });
+    return res.status(200).json({ success: true });
+  }
+
+  if (req.method === 'PATCH') {
+    const { ids, is_booked, is_available } = req.body;
+    await fetch(`${SUPABASE_URL}/rest/v1/slots?id=in.(${ids.join(',')})`, {
+      method: 'PATCH',
+      headers: {
+        apikey: SUPABASE_KEY,
+        Authorization: `Bearer ${SUPABASE_KEY}`,
+        'Content-Type': 'application/json',
+        Prefer: 'return=minimal'
+      },
+      body: JSON.stringify({ is_booked, is_available })
     });
     return res.status(200).json({ success: true });
   }

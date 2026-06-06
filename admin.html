@@ -146,6 +146,7 @@ tr:hover td{background:#f5f5f3;}
     <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px;">
       <button class="action-btn" id="btn-add" disabled onclick="applyAdd()">✚ 選択枠を追加</button>
       <button class="action-btn danger" id="btn-block" disabled onclick="applyBlock()">🔒 ブロック追加</button>
+      <button class="action-btn" id="btn-manual-book" disabled onclick="applyManualBook()" style="background:#e11d48;">📅 手動予約登録</button>
       <button class="action-btn del" id="btn-del" disabled onclick="applyDel()">✕ 選択枠を削除</button>
       <button class="action-btn del" id="btn-fdel" disabled onclick="applyFDel()" style="background:#9333ea;">🗑 予約済み強制削除</button>
       <button class="action-btn sec" onclick="clearSel()">選択解除</button>
@@ -411,10 +412,11 @@ function updateActionBtns() {
   const addKeys  = Object.entries(selCells).filter(([,v])=>v==='add');
   const delKeys  = Object.entries(selCells).filter(([,v])=>v==='del');
   const fdelKeys = Object.entries(selCells).filter(([,v])=>v==='booked-del');
-  document.getElementById('btn-add').disabled   = !addKeys.length;
-  document.getElementById('btn-block').disabled = !addKeys.length;
-  document.getElementById('btn-del').disabled   = !delKeys.length;
-  document.getElementById('btn-fdel').disabled  = !fdelKeys.length;
+  document.getElementById('btn-add').disabled        = !addKeys.length;
+  document.getElementById('btn-block').disabled      = !addKeys.length;
+  document.getElementById('btn-manual-book').disabled = !(addKeys.length || delKeys.length);
+  document.getElementById('btn-del').disabled        = !delKeys.length;
+  document.getElementById('btn-fdel').disabled       = !fdelKeys.length;
 }
 
 function getSelByMode(mode) {
@@ -439,6 +441,41 @@ async function applyBlock() {
   toast('ブロック追加しました');
   clearSel(); await loadWeek();
 }
+async function applyManualBook() {
+  const addKeys  = getSelByMode('add');
+  const delKeys  = getSelByMode('del');
+  const promises = [];
+
+  // 空き枠 → 予約済みとして新規挿入
+  if (addKeys.length) {
+    const byDate = groupByDate(addKeys);
+    for (const [date, times] of Object.entries(byDate)) {
+      promises.push(fetch('/api/admin-slots', {
+        method: 'POST',
+        headers: {'Content-Type':'application/json','X-Admin-Password':adminPw},
+        body: JSON.stringify({date, times, blocked: true})
+      }));
+    }
+  }
+
+  // 緑の空き枠 → 予約済みに上書き更新
+  if (delKeys.length) {
+    const ids = delKeys.map(k => document.querySelector(`[data-key="${k}"]`)?.dataset.slotid).filter(Boolean);
+    if (ids.length) {
+      promises.push(fetch('/api/admin-slots', {
+        method: 'PATCH',
+        headers: {'Content-Type':'application/json','X-Admin-Password':adminPw},
+        body: JSON.stringify({ids, is_booked: true, is_available: false})
+      }));
+    }
+  }
+
+  await Promise.all(promises);
+  toast('手動予約として登録しました');
+  clearSel();
+  await loadWeek();
+}
+
 async function applyDel() {
   const keys = getSelByMode('del');
   const ids = keys.map(k=>{
