@@ -487,12 +487,9 @@ async function bulkAdd() {
   const days = getDaysOfMonth(y, m, dows);
   const times = getTimesInRange(from, to);
 
-  let count = 0;
-  for (const date of days) {
-    await fetch('/api/admin-slots',{method:'POST',headers:{'Content-Type':'application/json','X-Admin-Password':adminPw},body:JSON.stringify({date,times})});
-    count++;
-  }
-  toast(`${count}日分の枠を追加しました`);
+  if (!days.length) { toast('対象日がありません'); return; }
+  await fetch('/api/admin-slots',{method:'POST',headers:{'Content-Type':'application/json','X-Admin-Password':adminPw},body:JSON.stringify({dates:days,times})});
+  toast(`${days.length}日分の枠を追加しました`);
   await loadWeek();
 }
 

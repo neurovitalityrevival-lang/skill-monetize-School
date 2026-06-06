@@ -23,13 +23,15 @@ export default async function handler(req, res) {
   }
 
   if (req.method === 'POST') {
-    const { date, times, blocked } = req.body;
-    const rows = times.map(t => ({
-      date,
-      start_time: t,
-      is_available: !blocked,
-      is_booked: !!blocked
-    }));
+    const { date, dates, times, blocked } = req.body;
+    // datesが配列なら一括、dateが単体なら従来通り
+    const targetDates = dates || [date];
+    const rows = [];
+    for (const d of targetDates) {
+      for (const t of times) {
+        rows.push({ date: d, start_time: t, is_available: !blocked, is_booked: !!blocked });
+      }
+    }
     await fetch(`${SUPABASE_URL}/rest/v1/slots`, {
       method: 'POST',
       headers: {

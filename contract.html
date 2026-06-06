@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>電子契約書・署名 | スキマネスクール3ヶ月コース</title>
+<style>
+  :root {
+    --main: #4BBFBE;
+    --accent: #F4845F;
+    --base: #FFF8F0;
+    --text: #3A2E28;
+    --main-dark: #3aa3a2;
+    --accent-dark: #e06b45;
+    --white: #ffffff;
+    --gray: #f0ebe5;
+    --border: #ddd;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Hiragino Kaku Gothic Pro', 'Yu Gothic', 'Meiryo', sans-serif;
+    color: var(--text); background: var(--base); line-height: 1.8;
+  }
+
+  /* HEADER */
+  header {
+    background: var(--white); border-bottom: 3px solid var(--main);
+    padding: 16px 24px; text-align: center;
+    box-shadow: 0 2px 12px rgba(75,191,190,0.1);
+  }
+  .header-brand { font-size: 0.9rem; color: var(--main); font-weight: 700; margin-bottom: 4px; }
+  .header-title { font-size: 1.3rem; font-weight: 900; color: var(--text); }
+  .header-sub { font-size: 0.85rem; color: #888; }
+
+  /* MAIN */
+  .contract-main { max-width: 840px; margin: 0 auto; padding: 40px 20px 80px; }
+
+  /* NOTICE */
+  .notice-box {
+    background: linear-gradient(135deg, #fff3ee, #fff8f4);
+    border: 2px solid var(--accent); border-radius: 14px; padding: 20px 24px;
+    margin-bottom: 32px;
+  }
+  .notice-title { font-size: 1rem; font-weight: 700; color: var(--accent); margin-bottom: 8px; }
+  .notice-text { font-size: 0.88rem; line-height: 1.9; color: var(--text); }
+
+  /* CONTRACT BODY */
+  .contract-doc {
+    background: var(--white); border-radius: 20px; padding: 40px 48px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.06); margin-bottom: 32px;
+  }
+  .contract-heading {
+    text-align: center; margin-bottom: 32px; padding-bottom: 24px;
+    border-bottom: 2px solid var(--main);
+  }
+  .contract-heading h1 { font-size: 1.4rem; font-weight: 900; color: var(--text); margin-bottom: 6px; }
+  .contract-heading p { font-size: 0.88rem; color: #888; }
+  .contract-preamble {
+    font-size: 0.9rem; line-height: 2; color: var(--text);
+    background: var(--base); border-radius: 10px; padding: 16px 20px;
+    margin-bottom: 28px; border-left: 4px solid var(--main);
+  }
+  .article { margin-bottom: 28px; }
+  .article-title {
+    font-size: 1rem; font-weight: 700; color: var(--main);
+    margin-bottom: 10px; padding-bottom: 6px;
+    border-bottom: 1px solid var(--gray);
+  }
+  .article-body { font-size: 0.88rem; line-height: 2; color: var(--text); }
+  .article-body ol { padding-left: 20px; }
+  .article-body ol li { margin-bottom: 6px; }
+  .article-body ul { padding-left: 20px; list-style: disc; }
+  .article-body ul li { margin-bottom: 6px; }
+  .article-warning {
+    background: #fff3ee; border: 1px solid #f4845f4d;
+    border-radius: 8px; padding: 12px 16px; margin-top: 10px;
+    font-size: 0.85rem; color: var(--accent); font-weight: 600;
+  }
+
+  /* CHECKLIST */
+  .checklist-section {
+    background: var(--white); border-radius: 20px; padding: 32px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.06); margin-bottom: 28px;
+  }
+  .checklist-title { font-size: 1.1rem; font-weight: 700; color: var(--text); margin-bottom: 20px; }
+  .check-item {
+    display: flex; align-items: flex-start; gap: 14px;
+    padding: 14px 0; border-bottom: 1px solid var(--gray); cursor: pointer;
+  }
+  .check-item:last-child { border-bottom: none; }
+  .check-item input[type="checkbox"] {
+    width: 22px; height: 22px; accent-color: var(--main);
+    flex-shrink: 0; margin-top: 2px; cursor: pointer;
+  }
+  .check-label { font-size: 0.9rem; line-height: 1.7; }
+  .check-counter {
+    text-align: center; font-size: 0.85rem; color: #888; margin-top: 12px;
+  }
+  .check-counter span { font-weight: 700; color: var(--main); font-size: 1.1rem; }
+
+  /* CLIENT INFO */
+  .client-section {
+    background: var(--white); border-radius: 20px; padding: 32px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.06); margin-bottom: 28px;
+  }
+  .client-title { font-size: 1.1rem; font-weight: 700; color: var(--text); margin-bottom: 20px; }
+  .form-group { margin-bottom: 18px; }
+  .form-label { display: block; font-size: 0.85rem; font-weight: 700; margin-bottom: 6px; }
+  .form-required { color: var(--accent); margin-left: 4px; }
+  .form-input {
+    width: 100%; padding: 12px 16px; border-radius: 10px;
+    border: 1.5px solid var(--border); background: var(--base);
+    font-size: 0.95rem; font-family: inherit; color: var(--text);
+    transition: border 0.2s; outline: none;
+  }
+  .form-input:focus { border-color: var(--main); }
+
+  /* SIGNATURE */
+  .sig-section {
+    background: var(--white); border-radius: 20px; padding: 32px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.06); margin-bottom: 28px;
+  }
+  .sig-title { font-size: 1.1rem; font-weight: 700; color: var(--text); margin-bottom: 8px; }
+  .sig-sub { font-size: 0.85rem; color: #888; margin-bottom: 16px; }
+  .sig-canvas-wrap {
+    border: 2px solid var(--border); border-radius: 12px; overflow: hidden;
+    background: var(--white); position: relative; margin-bottom: 12px;
+  }
+  #sigCanvas {
+    display: block; width: 100%; height: 200px; cursor: crosshair;
+    touch-action: none;
+  }
+  .sig-placeholder {
+    position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+    color: #ccc; font-size: 0.9rem; pointer-events: none; text-align: center;
+    transition: opacity 0.2s;
+  }
+  .sig-actions { display: flex; gap: 10px; }
+  .sig-clear {
+    background: none; border: 1.5px solid var(--border); color: #888;
+    padding: 8px 18px; border-radius: 8px; cursor: pointer; font-family: inherit;
+    font-size: 0.85rem; transition: all 0.2s;
+  }
+  .sig-clear:hover { border-color: var(--accent); color: var(--accent); }
+
+  /* SUBMIT */
+  .submit-section { text-align: center; }
+  .submit-date { font-size: 0.9rem; color: #888; margin-bottom: 20px; }
+  .submit-btn {
+    display: inline-block; background: #ccc; color: var(--white);
+    border: none; padding: 18px 56px; border-radius: 50px; font-size: 1.05rem;
+    font-weight: 700; cursor: not-allowed; font-family: inherit;
+    transition: all 0.3s; box-shadow: none;
+  }
+  .submit-btn.ready {
+    background: var(--accent); cursor: pointer;
+    box-shadow: 0 4px 20px rgba(244,132,95,0.4);
+  }
+  .submit-btn.ready:hover { background: var(--accent-dark); transform: translateY(-2px); }
+  .submit-note { font-size: 0.82rem; color: #aaa; margin-top: 12px; }
+
+  /* COMPLETE */
+  .complete-box {
+    display: none; text-align: center; background: var(--white);
+    border-radius: 20px; padding: 48px 32px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.06);
+  }
+  .complete-icon { font-size: 4rem; margin-bottom: 16px; }
+  .complete-title { font-size: 1.5rem; font-weight: 900; color: var(--main); margin-bottom: 12px; }
+  .complete-text { font-size: 0.95rem; line-height: 2; color: var(--text); }
+
+  @media (max-width: 640px) {
+    .contract-doc { padding: 28px 20px; }
+    .checklist-section, .client-section, .sig-section { padding: 24px 20px; }
+    .submit-btn { padding: 16px 40px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-brand">Na'au Noa / スキルマネタイズスクール</div>
+  <div class="header-title">電子契約書</div>
+  <div class="header-sub">スキマネスクール3ヶ月コース</div>
+</header>
+
+<main class="contract-main">
+
+  <!-- NOTICE -->
+  <div class="notice-box">
+    <div class="notice-title">⚠️ ご署名の前にお読みください</div>
+    <div class="notice-text">
+      本契約書は、スキマネスクール3ヶ月コースへの参加に際して締結される電子契約書です。<br>
+      各条項を最後までお読みいただき、重要事項チェックリストへのチェック、依頼者情報の入力、電子署名を完了することで契約が成立します。<br>
+      ご不明な点がある場合は、署名前に必ずご相談ください。
+    </div>
+  </div>
+
+  <!-- CONTRACT DOCUMENT -->
+  <div class="contract-doc">
+    <div class="contract-heading">
+      <h1>スキマネスクール3ヶ月コース<br>サービス利用契約書</h1>
+      <p>事業者：Na'au Noa（代表：小松 大将）</p>
+    </div>
+
+    <div class="contract-preamble">
+      本契約は、Na'au Noa（以下「事業者」）と、スキマネスクール3ヶ月コース（以下「本プログラム」）の受講を希望する方（以下「受講者」）との間において締結されるものです。受講者は本契約書の全条項を理解・同意した上で、電子署名により契約を締結するものとします。
+    </div>
+
+    <div class="article">
+      <div class="article-title">第1条（プログラム内容）</div>
+      <div class="article-body">
+        事業者は受講者に対し、以下のサービスを提供します。
+        <ol>
+          <li>潜在意識の書き換え個別Zoomセッション：月2回 × 3ヶ月（計6回）、マンツーマンで実施します。</li>
+          <li>ICAシート（理想の顧客の言語化）の作成サポート</li>
+          <li>オファーシート（サービスの価値・価格設定）の作成サポート</li>
+          <li>自習用講義動画の提供</li>
+          <li>オリジナルHP・LP・予約サイト・予約管理システム・電子契約システムの構築一式</li>
+          <li>SNS発信設計（発信軸・投稿の型・世界観設計）</li>
+          <li>DMによるサポート（平日10:00〜21:00）</li>
+        </ol>
+      </div>
+    </div>
+
+    <div class="article">
+      <div class="article-title">第2条（契約期間）</div>
+      <div class="article-body">
+        本契約の期間は、契約締結日を起算点として3ヶ月間とします。ただし、双方の合意により延長することができます。セッションの日程は、両者が協議の上で決定するものとします。
+      </div>
+    </div>
+
+    <div class="article">
+      <div class="article-title">第3条（料金・支払い）</div>
+      <div class="article-body">
+        <ol>
+          <li>本プログラムの料金は、事業者が別途提示した金額とします。</li>
+          <li>支払い方法・支払い期日については、個別にご案内いたします。</li>
+          <li>一度お支払いいただいた料金は、第6条に定める場合を除き、いかなる理由においても返金いたしません。</li>
+          <li>支払いが遅延した場合、事業者はサービスの提供を一時停止することがあります。</li>
+        </ol>
+      </div>
+    </div>
+
+    <div class="article">
+      <div class="article-title">第4条（成果・効果に関する免責事項）</div>
+      <div class="article-body">
+        <ol>
+          <li>本プログラムで得られる成果（収入・集客・事業化等）は、受講者の行動量・取り組み姿勢・個人差によって大きく異なります。事業者は特定の成果・収入・結果を保証するものではありません。</li>
+          <li>本プログラムの効果を最大化するためには、受講者自身が学んだことを実践・行動に移すことが不可欠です。セッションへの参加のみをもって自動的に成果が得られるものではありません。</li>
+          <li>行動しない・実践しない場合に成果が出なくても、事業者はその責任を負いません。</li>
+        </ol>
+        <div class="article-warning">
+          ⚠️ 成果には個人差があります。「やれば必ず稼げる」という保証は一切しておりません。行動し続けることが成果の前提です。
+        </div>
+      </div>
+    </div>
+
+    <div class="article">
+      <div class="article-title">第5条（受講者の自己責任）</div>
+      <div class="article-body">
+        <ol>
+          <li>受講者が本プログラムを通じて得た気づき・変化・行動・意思決定はすべて受講者自身の責任において行うものとします。</li>
+          <li>自己価値の認識・マインドセットの変化・事業上の選択・その結果について、事業者は一切の責任を負いません。</li>
+          <li>セッション内容・提供情報・ツールを活用するかどうかは受講者自身の判断に委ねられ、その結果も受講者が負うものとします。</li>
+          <li>変化を起こす主体は受講者自身であり、事業者はその変化を支援する立場に留まります。</li>
+        </ol>
+      </div>
+    </div>
+
+    <div class="article">
+      <div class="article-title">第6条（キャンセル・途中解約・返金不可）</div>
+      <div class="article-body">
+        <ol>
+          <li>セッションのキャンセルは、予定日の24時間前までにご連絡ください。無断欠席・当日キャンセルは消化済みとみなします。</li>
+          <li>受講者都合による途中解約（気が変わった・思ったより大変・他のことが忙しくなった等の理由を含む）は、いかなる場合も返金いたしません。申込・入金をもって受講者はこの条件に同意したものとみなします。</li>
+          <li>本プログラムへの参加は、最後まで取り組む意思を持って申し込むものとします。途中で諦めることを前提とした参加はお断りします。</li>
+          <li>事業者の責めに帰すべき事由（事業者都合による全面的なサービス停止等）による解約の場合は、未実施セッション分を日割り計算にて返金いたします。</li>
+        </ol>
+        <div class="article-warning">
+          ⚠️ 途中で諦めても返金はできません。「やってみてやめる」ではなく、「3ヶ月やり切る」覚悟を持てる方のみ申し込みください。
+        </div>
+      </div>
+    </div>
+
+    <div class="article">
+      <div class="article-title">第7条（録音・録画・コンテンツ転用禁止）</div>
+      <div class="article-body">
+        受講者は、個別セッション・提供コンテンツ（動画・資料・ツール等）を事業者の事前書面による同意なく録音・録画・スクリーンショット・複製・転用・転売することを禁止します。違反が確認された場合、契約を即時解除し、損害賠償を請求することがあります。
+      </div>
+    </div>
+
+    <div class="article">
+      <div class="article-title">第8条（誹謗中傷禁止）</div>
+      <div class="article-body">
+        受講者は、本プログラム・事業者・他の受講者に対して、SNS・口コミサイト・その他あらゆる媒体において誹謗中傷・虚偽の情報の流布を行ってはなりません。違反した場合、損害賠償を請求することがあります。
+      </div>
+    </div>
+
+    <div class="article">
+      <div class="article-title">第9条（健全な関係性の維持）</div>
+      <div class="article-body">
+        事業者と受講者は、プロフェッショナルとして相互に敬意を持った健全な関係性を維持します。受講者は事業者に対して過度な連絡・依存・要求を行わないものとします。事業者は受講者の自立と成長を支援する立場であり、受講者の課題を代わりに解決することは本サービスの範囲外です。
+      </div>
+    </div>
+
+    <div class="article">
+      <div class="article-title">第10条（個人情報の取り扱い）</div>
+      <div class="article-body">
+        事業者は、受講者から取得した個人情報をサービス提供・連絡・請求の目的にのみ使用します。第三者への提供は、法令に基づく場合を除き行いません。個人情報の取り扱いは、個人情報保護法その他関連法令に従います。
+      </div>
+    </div>
+
+    <div class="article">
+      <div class="article-title">第11条（秘密保持）</div>
+      <div class="article-body">
+        事業者・受講者の双方は、本プログラムを通じて知り得た相手方の個人情報・事業情報・セッション内容について、第三者に開示・漏洩してはなりません。本義務は契約終了後も3年間継続するものとします。
+      </div>
+    </div>
+
+    <div class="article">
+      <div class="article-title">第12条（準拠法・管轄）</div>
+      <div class="article-body">
+        本契約は日本法に準拠します。本契約に関する紛争については、神奈川県茅ヶ崎市を管轄する裁判所を第一審の専属的合意管轄裁判所とします。
+      </div>
+    </div>
+
+    <div class="article">
+      <div class="article-title">第13条（協議解決）</div>
+      <div class="article-body">
+        本契約に定めのない事項または解釈に疑義が生じた場合は、事業者と受講者が誠実に協議の上、解決するものとします。
+      </div>
+    </div>
+
+    <div style="text-align:right; font-size:0.85rem; color:#888; margin-top:32px; padding-top:20px; border-top:1px solid var(--gray);">
+      事業者：Na'au Noa<br>
+      代表：小松 大将（こまつ だいすけ）<br>
+      所在地：神奈川県茅ヶ崎市<br>
+      メール：neuro.vitality.revival@gmail.com<br>
+      電話：070-9197-4336
+    </div>
+  </div>
+
+  <!-- CHECKLIST -->
+  <div class="checklist-section">
+    <div class="checklist-title">✦ 重要事項チェックリスト（全5項目）</div>
+    <p style="font-size:0.85rem; color:#888; margin-bottom:16px;">以下の5項目すべてに同意された場合のみ、署名・送信が可能です。</p>
+
+    <label class="check-item">
+      <input type="checkbox" class="agree-check" onchange="updateCheckCount()">
+      <span class="check-label">本プログラムで得られる成果（収入・集客・事業化等）は個人差があること、行動しなければ成果は出ないことを理解しました。特定の結果は保証されないことに同意します。</span>
+    </label>
+    <label class="check-item">
+      <input type="checkbox" class="agree-check" onchange="updateCheckCount()">
+      <span class="check-label">本プログラムを通じた変化・行動・意思決定とその結果の責任は、すべて自分自身にあることを理解しました。変化を起こす主体は自分であり、事業者はその支援者であることに同意します。</span>
+    </label>
+    <label class="check-item">
+      <input type="checkbox" class="agree-check" onchange="updateCheckCount()">
+      <span class="check-label">気が変わった・思ったより大変・他に優先事項ができたなど、受講者都合による途中解約の場合、いかなる理由においても返金されないことを理解し、3ヶ月やり切る覚悟を持って申し込みます。</span>
+    </label>
+    <label class="check-item">
+      <input type="checkbox" class="agree-check" onchange="updateCheckCount()">
+      <span class="check-label">セッションの無断キャンセル・録音・録画・コンテンツの無断転用・転売は禁止であることを理解しました。事業者・他の受講者への誹謗中傷を行いません。</span>
+    </label>
+    <label class="check-item">
+      <input type="checkbox" class="agree-check" onchange="updateCheckCount()">
+      <span class="check-label">本契約書（全13条）の内容を十分に読み、理解・同意した上で電子署名します。</span>
+    </label>
+
+    <div class="check-counter">
+      <span id="checkCountNum">0</span> / 5 項目に同意済み
+    </div>
+  </div>
+
+  <!-- CLIENT INFO -->
+  <div class="client-section">
+    <div class="client-title">✦ 依頼者情報</div>
+    <div class="form-group">
+      <label class="form-label">お名前（漢字）<span class="form-required">*</span></label>
+      <input class="form-input" type="text" id="clName" placeholder="山田 花子" required>
+    </div>
+    <div class="form-group">
+      <label class="form-label">住所<span class="form-required">*</span></label>
+      <input class="form-input" type="text" id="clAddress" placeholder="東京都渋谷区〇〇 1-2-3" required>
+    </div>
+    <div class="form-group">
+      <label class="form-label">電話番号<span class="form-required">*</span></label>
+      <input class="form-input" type="tel" id="clPhone" placeholder="090-0000-0000" required>
+    </div>
+    <div class="form-group">
+      <label class="form-label">メールアドレス<span class="form-required">*</span></label>
+      <input class="form-input" type="email" id="clEmail" placeholder="example@email.com" required>
+    </div>
+  </div>
+
+  <!-- SIGNATURE -->
+  <div class="sig-section">
+    <div class="sig-title">✦ 電子署名</div>
+    <div class="sig-sub">下の枠内にお名前（サイン）をマウスまたは指でお書きください</div>
+    <div class="sig-canvas-wrap">
+      <canvas id="sigCanvas"></canvas>
+      <div class="sig-placeholder" id="sigPlaceholder">ここにサインしてください</div>
+    </div>
+    <div class="sig-actions">
+      <button class="sig-clear" onclick="clearSig()">消去してやり直す</button>
+    </div>
+  </div>
+
+  <!-- SUBMIT -->
+  <div class="submit-section">
+    <div class="submit-date" id="submitDate"></div>
+    <button class="submit-btn" id="submitBtn" onclick="submitContract()" disabled>
+      署名して契約を締結する
+    </button>
+    <div class="submit-note">※ 全項目チェック＋依頼者情報入力＋署名が完了するとボタンが有効になります</div>
+  </div>
+
+  <!-- COMPLETE -->
+  <div class="complete-box" id="completeBox">
+    <div class="complete-icon">✅</div>
+    <div class="complete-title">契約が締結されました</div>
+    <div class="complete-text" id="completeText"></div>
+    <br>
+    <a href="index.html" style="display:inline-block; background:var(--main); color:var(--white); padding:14px 32px; border-radius:50px; text-decoration:none; font-weight:700; margin-top:8px;">ホームに戻る</a>
+  </div>
+
+</main>
+
+<script>
+  // ===== DATE =====
+  const now = new Date();
+  document.getElementById('submitDate').textContent =
+    `締結日：${now.getFullYear()}年${now.getMonth()+1}月${now.getDate()}日`;
+
+  // ===== CHECK COUNT =====
+  function updateCheckCount() {
+    const checks = document.querySelectorAll('.agree-check:checked').length;
+    document.getElementById('checkCountNum').textContent = checks;
+    validateForm();
+  }
+
+  // ===== CANVAS SIGNATURE =====
+  const canvas = document.getElementById('sigCanvas');
+  const ctx = canvas.getContext('2d');
+  let drawing = false;
+  let hasSig = false;
+
+  function resizeCanvas() {
+    const rect = canvas.parentElement.getBoundingClientRect();
+    canvas.width = rect.width;
+    canvas.height = 200;
+  }
+  resizeCanvas();
+  window.addEventListener('resize', () => { resizeCanvas(); });
+
+  function getPos(e) {
+    const rect = canvas.getBoundingClientRect();
+    const scaleX = canvas.width / rect.width;
+    const scaleY = canvas.height / rect.height;
+    if (e.touches) {
+      return {
+        x: (e.touches[0].clientX - rect.left) * scaleX,
+        y: (e.touches[0].clientY - rect.top) * scaleY
+      };
+    }
+    return {
+      x: (e.clientX - rect.left) * scaleX,
+      y: (e.clientY - rect.top) * scaleY
+    };
+  }
+
+  canvas.addEventListener('mousedown', (e) => { drawing = true; const p = getPos(e); ctx.beginPath(); ctx.moveTo(p.x, p.y); });
+  canvas.addEventListener('mousemove', (e) => {
+    if (!drawing) return;
+    const p = getPos(e);
+    ctx.lineTo(p.x, p.y);
+    ctx.strokeStyle = '#3A2E28';
+    ctx.lineWidth = 2.5;
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
+    ctx.stroke();
+    hasSig = true;
+    document.getElementById('sigPlaceholder').style.opacity = '0';
+    validateForm();
+  });
+  canvas.addEventListener('mouseup', () => { drawing = false; });
+  canvas.addEventListener('mouseleave', () => { drawing = false; });
+
+  canvas.addEventListener('touchstart', (e) => {
+    e.preventDefault();
+    drawing = true;
+    const p = getPos(e);
+    ctx.beginPath(); ctx.moveTo(p.x, p.y);
+  }, { passive: false });
+  canvas.addEventListener('touchmove', (e) => {
+    e.preventDefault();
+    if (!drawing) return;
+    const p = getPos(e);
+    ctx.lineTo(p.x, p.y);
+    ctx.strokeStyle = '#3A2E28';
+    ctx.lineWidth = 2.5;
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
+    ctx.stroke();
+    hasSig = true;
+    document.getElementById('sigPlaceholder').style.opacity = '0';
+    validateForm();
+  }, { passive: false });
+  canvas.addEventListener('touchend', () => { drawing = false; });
+
+  function clearSig() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    hasSig = false;
+    document.getElementById('sigPlaceholder').style.opacity = '1';
+    validateForm();
+  }
+
+  // ===== VALIDATE =====
+  function validateForm() {
+    const checks = document.querySelectorAll('.agree-check:checked').length === 5;
+    const name = document.getElementById('clName').value.trim();
+    const addr = document.getElementById('clAddress').value.trim();
+    const phone = document.getElementById('clPhone').value.trim();
+    const email = document.getElementById('clEmail').value.trim();
+    const allFilled = checks && name && addr && phone && email && hasSig;
+    const btn = document.getElementById('submitBtn');
+    btn.disabled = !allFilled;
+    btn.classList.toggle('ready', !!allFilled);
+  }
+
+  ['clName','clAddress','clPhone','clEmail'].forEach(id => {
+    document.getElementById(id).addEventListener('input', validateForm);
+  });
+
+  // ===== SUBMIT =====
+  async function submitContract() {
+    const btn = document.getElementById('submitBtn');
+    btn.disabled = true;
+    btn.textContent = '送信中...';
+
+    const name = document.getElementById('clName').value.trim();
+    const addr = document.getElementById('clAddress').value.trim();
+    const phone = document.getElementById('clPhone').value.trim();
+    const email = document.getElementById('clEmail').value.trim();
+    const sigData = canvas.toDataURL('image/png');
+    const contractDate = `${now.getFullYear()}年${now.getMonth()+1}月${now.getDate()}日`;
+
+    // Send via formsubmit
+    const form = document.createElement('form');
+    form.method = 'POST';
+    form.action = 'https://formsubmit.co/neuro.vitality.revival@gmail.com';
+    form.style.display = 'none';
+
+    const fields = {
+      '_subject': '【電子契約書】スキマネスクール3ヶ月コース 署名完了',
+      '_captcha': 'false',
+      '契約プログラム': 'スキマネスクール3ヶ月コース',
+      '締結日': contractDate,
+      '依頼者名': name,
+      '住所': addr,
+      '電話番号': phone,
+      'メールアドレス': email,
+      '重要事項確認': '全5項目に同意済み',
+      '署名画像': '（署名画像は電子データとして記録されました）'
+    };
+
+    Object.entries(fields).forEach(([k, v]) => {
+      const input = document.createElement('input');
+      input.name = k; input.value = v;
+      form.appendChild(input);
+    });
+
+    document.body.appendChild(form);
+    form.submit();
+
+    // Show complete
+    document.querySelectorAll('.contract-main > *:not(#completeBox)').forEach(el => el.style.display = 'none');
+    const completeBox = document.getElementById('completeBox');
+    completeBox.style.display = 'block';
+
+    document.getElementById('completeText').innerHTML = `
+      <strong>${name}</strong> 様<br><br>
+      スキマネスクール3ヶ月コースの電子契約書への署名が完了しました。<br><br>
+      締結日：<strong>${contractDate}</strong><br><br>
+      署名内容は事業者（小松大将）に送信されました。<br>
+      確認次第、メールまたはDMにてご連絡いたします。<br><br>
+      ご不明な点はお気軽にご連絡ください。<br>
+      📧 neuro.vitality.revival@gmail.com<br>
+      📱 070-9197-4336<br>
+      📷 @daisuke_aloha_magician
+    `;
+
+    window.scrollTo(0, 0);
+  }
+</script>
+</body>
+</html>

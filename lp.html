@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>【スキルマネタイズスクール】ヒーリング・NLP・占いで売れない…その理由と解決策 | 小松大将</title>
+<meta name="description" content="資格はあるのに売れない。そのブロックを3ヶ月で外し、理想のお客様からお金を頂ける自分へ。スキルマネタイズコーチ小松大将の無料個別相談はこちら。">
+<style>
+  :root {
+    --main: #4BBFBE;
+    --accent: #F4845F;
+    --base: #FFF8F0;
+    --text: #3A2E28;
+    --main-dark: #3aa3a2;
+    --accent-dark: #e06b45;
+    --white: #ffffff;
+    --gray: #f0ebe5;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Hiragino Kaku Gothic Pro', 'Yu Gothic', 'Meiryo', sans-serif;
+    color: var(--text);
+    background: var(--base);
+    line-height: 1.8;
+  }
+
+  /* ===== HEADER ===== */
+  header {
+    background: rgba(255,248,240,0.97);
+    padding: 12px 24px;
+    text-align: center;
+    border-bottom: 2px solid var(--main);
+    position: sticky; top: 0; z-index: 100;
+  }
+  .header-text {
+    font-size: 0.85rem; color: var(--text);
+    display: flex; align-items: center; justify-content: center; gap: 12px; flex-wrap: wrap;
+  }
+  .header-cta {
+    display: inline-block; background: var(--accent); color: var(--white);
+    padding: 8px 20px; border-radius: 50px; font-size: 0.85rem; font-weight: 700;
+    text-decoration: none; transition: all 0.2s;
+  }
+  .header-cta:hover { background: var(--accent-dark); }
+
+  /* ===== HERO ===== */
+  .hero {
+    background: linear-gradient(160deg, #0d5a59 0%, #4BBFBE 50%, #F4845F 100%);
+    padding: 60px 24px 80px;
+    text-align: center; color: var(--white);
+    position: relative; overflow: hidden;
+  }
+  .hero::after {
+    content: '';
+    position: absolute; bottom: -1px; left: 0; right: 0; height: 60px;
+    background: var(--base);
+    clip-path: ellipse(55% 100% at 50% 100%);
+  }
+  .hero-eyecatch {
+    display: inline-block; background: rgba(255,255,255,0.2);
+    border: 1px solid rgba(255,255,255,0.6);
+    color: var(--white); padding: 6px 20px; border-radius: 50px;
+    font-size: 0.8rem; letter-spacing: 0.15em; margin-bottom: 20px;
+  }
+  .hero-h1 {
+    font-size: clamp(1.6rem, 4.5vw, 2.6rem);
+    font-weight: 900; line-height: 1.45; margin-bottom: 20px;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  }
+  .hero-h1 em { color: #fff176; font-style: normal; display: block; margin-top: 6px; }
+  .mob-br { display: none; }
+  @media (max-width: 640px) { .mob-br { display: block; } }
+  .hero-sub { font-size: 1rem; color: rgba(255,255,255,0.9); margin-bottom: 32px; line-height: 1.9; }
+  .hero-target {
+    display: inline-block; background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.4);
+    padding: 12px 24px; border-radius: 12px;
+    font-size: 0.9rem; margin-bottom: 36px; line-height: 1.8;
+  }
+  .cta-big {
+    display: inline-block; background: var(--accent); color: var(--white);
+    padding: 20px 48px; border-radius: 50px; font-size: 1.15rem; font-weight: 700;
+    text-decoration: none; box-shadow: 0 6px 24px rgba(244,132,95,0.5);
+    transition: all 0.3s; letter-spacing: 0.05em;
+  }
+  .cta-big:hover { background: var(--accent-dark); transform: translateY(-3px); box-shadow: 0 10px 32px rgba(244,132,95,0.6); }
+  .cta-note { font-size: 0.8rem; color: rgba(255,255,255,0.8); margin-top: 12px; }
+
+  /* ===== SECTIONS ===== */
+  section { padding: 72px 24px; }
+  .container { max-width: 820px; margin: 0 auto; }
+  .sec-label {
+    display: block; font-size: 0.72rem; letter-spacing: 0.25em;
+    color: var(--main); font-weight: 700; margin-bottom: 8px; text-transform: uppercase;
+  }
+  .sec-title {
+    font-size: clamp(1.4rem, 4vw, 2rem); font-weight: 900;
+    color: var(--text); margin-bottom: 12px; line-height: 1.4;
+  }
+  .sec-title span { color: var(--main); }
+  .sec-title em { color: var(--accent); font-style: normal; }
+  .divider { width: 48px; height: 3px; background: var(--main); margin: 0 0 36px; border-radius: 2px; }
+  .divider.center { margin: 0 auto 36px; }
+
+  /* ===== CONCERNS ===== */
+  #concerns { background: var(--white); }
+  .concern-grid { display: grid; gap: 14px; }
+  .concern-row {
+    display: flex; align-items: center; gap: 14px;
+    background: var(--base); padding: 16px 18px; border-radius: 12px;
+    border-left: 4px solid var(--accent);
+  }
+  .concern-check { font-size: 1.3rem; flex-shrink: 0; }
+  .concern-txt { font-size: 0.95rem; }
+
+  /* ===== DANGER ===== */
+  #danger { background: #2a1a0e; color: var(--white); }
+  #danger .sec-label { color: #F4845F; }
+  #danger .sec-title { color: var(--white); }
+  #danger .divider { background: var(--accent); }
+  .danger-intro { font-size: 1rem; color: rgba(255,255,255,0.85); margin-bottom: 32px; line-height: 2; }
+  .danger-items { display: grid; gap: 16px; }
+  .danger-item {
+    background: rgba(244,132,95,0.15); border: 1px solid rgba(244,132,95,0.3);
+    border-radius: 12px; padding: 20px 22px;
+    display: flex; gap: 16px; align-items: flex-start;
+  }
+  .danger-num {
+    font-size: 1.5rem; font-weight: 900; color: var(--accent); flex-shrink: 0; line-height: 1;
+  }
+  .danger-text { font-size: 0.9rem; line-height: 1.8; color: rgba(255,255,255,0.9); }
+
+  /* ===== VOICE ===== */
+  #voice { background: var(--base); }
+  .voice-cards { display: grid; gap: 20px; }
+  .voice-card {
+    background: var(--white); border-radius: 16px; padding: 24px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+  }
+  .voice-stars { color: #FFB800; font-size: 1rem; margin-bottom: 10px; }
+  .voice-tag {
+    display: inline-block; background: #e8f9f9; color: var(--main);
+    font-size: 0.75rem; padding: 3px 10px; border-radius: 50px; margin-bottom: 8px;
+  }
+  .voice-text { font-size: 0.9rem; line-height: 1.9; color: var(--text); margin-bottom: 12px; }
+  .voice-author { font-size: 0.82rem; color: #999; }
+
+  /* ===== STORY ===== */
+  #story { background: var(--white); }
+  .story-box {
+    display: grid; grid-template-columns: 200px 1fr; gap: 36px; align-items: start;
+  }
+  .story-photo {
+    width: 100%; aspect-ratio: 1; border-radius: 50%;
+    background: linear-gradient(135deg, #c8eeed, #4BBFBE);
+    display: flex; align-items: center; justify-content: center;
+    color: var(--white); font-size: 0.85rem; text-align: center;
+    box-shadow: 0 4px 20px rgba(75,191,190,0.3);
+  }
+  .story-name { font-size: 1.3rem; font-weight: 900; color: var(--text); margin-bottom: 4px; }
+  .story-title {
+    display: inline-block; background: var(--main); color: var(--white);
+    padding: 4px 14px; border-radius: 50px; font-size: 0.8rem; font-weight: 700;
+    margin-bottom: 16px;
+  }
+  .story-text { font-size: 0.92rem; line-height: 2; color: var(--text); }
+
+  /* ===== MENU ===== */
+  #menu { background: var(--base); }
+  .program-box {
+    background: var(--white); border: 1px solid var(--border);
+    border-radius: 2px; padding: 36px; margin-bottom: 0;
+  }
+  .program-name { font-size: 1.2rem; font-weight: 900; color: var(--text); margin-bottom: 6px; }
+  .program-desc { font-size: 0.88rem; color: #888; line-height: 1.8; margin-bottom: 20px; }
+  .program-note {
+    background: linear-gradient(135deg, #e8f9f9, #d0f0ef);
+    border-radius: 2px; padding: 14px 20px; font-size: 0.88rem;
+    color: var(--main); font-weight: 700; margin-bottom: 28px; text-align: center;
+    border: 1px solid rgba(58,174,172,0.25);
+  }
+  .program-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 12px; margin-bottom: 32px;
+  }
+  .program-item {
+    background: var(--base); border: 1px solid var(--border);
+    border-radius: 2px; padding: 18px 16px;
+    display: flex; flex-direction: column; gap: 9px;
+  }
+  .program-item-icon { width: 34px; height: 34px; flex-shrink: 0; color: var(--main); }
+  .program-item-title { font-size: 0.86rem; font-weight: 700; color: var(--text); line-height: 1.4; }
+  .program-item-desc { font-size: 0.76rem; color: #888; line-height: 1.6; }
+  .free-card {
+    background: linear-gradient(135deg, #fff3ee, #fff8f0);
+    border: 2px dashed var(--accent); border-radius: 20px; padding: 32px;
+    text-align: center; margin-top: 24px;
+  }
+  .free-title { font-size: 1.2rem; font-weight: 900; color: var(--accent); margin-bottom: 8px; }
+  .free-desc { font-size: 0.9rem; color: var(--text); line-height: 1.8; margin-bottom: 20px; }
+
+  /* ===== FINAL CTA ===== */
+  #finalcta {
+    background: linear-gradient(135deg, #0d5a59, #4BBFBE);
+    text-align: center; color: var(--white);
+  }
+  #finalcta .sec-title { color: var(--white); }
+  #finalcta .sec-label { color: rgba(255,255,255,0.7); }
+  .final-text { font-size: 1rem; color: rgba(255,255,255,0.9); line-height: 2; margin-bottom: 36px; }
+  .cta-steps {
+    display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; margin-bottom: 36px;
+  }
+  .cta-step {
+    background: rgba(255,255,255,0.15); border-radius: 12px; padding: 16px 20px;
+    min-width: 160px; text-align: center;
+  }
+  .step-num { font-size: 1.5rem; font-weight: 900; color: #fff176; margin-bottom: 6px; }
+  .step-text { font-size: 0.82rem; color: rgba(255,255,255,0.9); }
+
+  /* ===== FOOTER ===== */
+  footer {
+    background: #1a2a2a; color: rgba(255,255,255,0.6);
+    padding: 32px 24px; text-align: center;
+  }
+  .footer-brand { font-size: 1.1rem; font-weight: 700; color: var(--white); margin-bottom: 8px; }
+  .footer-copy { font-size: 0.78rem; }
+
+  /* ===== STICKY CTA (bottom) ===== */
+  .sticky-cta {
+    position: fixed; bottom: 0; left: 0; right: 0;
+    background: var(--accent); padding: 14px 24px;
+    text-align: center; z-index: 500;
+    box-shadow: 0 -4px 20px rgba(244,132,95,0.4);
+  }
+  .sticky-cta a {
+    color: var(--white); text-decoration: none; font-size: 1rem; font-weight: 700;
+  }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 640px) {
+    section { padding: 56px 20px; }
+    .story-box { grid-template-columns: 1fr; }
+    .story-photo { width: 160px; height: 160px; margin: 0 auto; }
+    .cta-steps { flex-direction: column; align-items: center; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="header-text">
+    <span>3ヶ月で理想のお客様からお金を頂く自分へ</span>
+    <a href="booking.html" class="header-cta">無料相談を予約 →</a>
+  </div>
+</header>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="container">
+    <span class="hero-eyecatch">Skill Monetize School</span>
+    <h1 class="hero-h1">
+      スキルを持っているのに、<br>
+      なぜか売れない——
+      <em>その理由は「スキル不足」<br class="mob-br">ではありません。</em>
+    </h1>
+    <p class="hero-sub">
+      自己価値・お金のブロック・理想顧客の設計を整えることで<br>
+      <strong style="color:#fff176;">3ヶ月以内に事業として成立させます。</strong>
+    </p>
+    <div class="hero-target">
+      集客・販売ができず収益化できていない<strong style="color:#fff176;">あなたへ</strong>
+    </div>
+    <br>
+    <a href="booking.html" class="cta-big">無料個別相談（60分）を予約する</a>
+    <div class="cta-note">完全無料 / Zoom / 勧誘なし / 平日10:00〜21:00</div>
+  </div>
+</div>
+
+<!-- CONCERNS -->
+<section id="concerns">
+  <div class="container">
+    <span class="sec-label">FOR YOU</span>
+    <h2 class="sec-title">こんな感覚、<em>ありませんか？</em></h2>
+    <div class="divider"></div>
+    <div class="concern-grid">
+      <div class="concern-row"><span class="concern-check">—</span><span class="concern-txt">資格は持っているのに、どうやって売ればいいかわからない</span></div>
+      <div class="concern-row"><span class="concern-check">—</span><span class="concern-txt">自分のスキルに自信が持てず、値段をつけることが怖い</span></div>
+      <div class="concern-row"><span class="concern-check">—</span><span class="concern-txt">SNSで発信しても全く反応がない</span></div>
+      <div class="concern-row"><span class="concern-check">—</span><span class="concern-txt">せっかく自己投資したのに収益化できず回収できていない</span></div>
+      <div class="concern-row"><span class="concern-check">—</span><span class="concern-txt">お金を頂くときやお金を自分が使う時に罪悪感がある</span></div>
+      <div class="concern-row"><span class="concern-check">—</span><span class="concern-txt">好きな技術で食べていけるようになりたい</span></div>
+      <div class="concern-row"><span class="concern-check">—</span><span class="concern-txt">SNSマーケティングなど習ったけど全然集客できない</span></div>
+      <div class="concern-row"><span class="concern-check">—</span><span class="concern-txt">発信やお客様と接するのが怖い、販売しようとしても体が動かない</span></div>
+      <div class="concern-row"><span class="concern-check">—</span><span class="concern-txt">世間の評価でジャッジされるのが怖いから動けない</span></div>
+    </div>
+    <div style="text-align:center; margin-top:36px;">
+      <p style="font-size:1rem; margin-bottom:24px; color:var(--text);">
+        1つでも当てはまるなら…<br>
+        <strong style="color:var(--accent);">その悩み、3ヶ月で解決できます。</strong>
+      </p>
+      <a href="booking.html" class="cta-big">無料個別相談を予約する</a>
+    </div>
+  </div>
+</section>
+
+<!-- DANGER -->
+<section id="danger">
+  <div class="container">
+    <span class="sec-label">WARNING</span>
+    <h2 class="sec-title" style="color:var(--white);">このまま変えなかったら<em style="color:var(--accent);">…</em></h2>
+    <div class="divider" style="background:var(--accent);"></div>
+    <p class="danger-intro">
+      「いつかやろう」「もう少し準備してから」——<br>
+      その言葉を繰り返すほど、現実は変わりません。<br>
+      むしろ、こんな未来が待っています。
+    </p>
+    <div class="danger-items">
+      <div class="danger-item">
+        <div class="danger-num">01</div>
+        <div class="danger-text"><strong>自己投資の回収がどんどん遅れる</strong><br>講座・資格・ツールへの投資が積み重なり、「また回収できなかった」という自己否定のループが続く。</div>
+      </div>
+      <div class="danger-item">
+        <div class="danger-num">02</div>
+        <div class="danger-text"><strong>スキルが「趣味」で終わる</strong><br>せっかくの才能や技術が、収入にならないまま「趣味レベル」に留まり続ける。情熱だけが空回りする。</div>
+      </div>
+      <div class="danger-item">
+        <div class="danger-num">03</div>
+        <div class="danger-text"><strong>低単価・長時間労働から抜け出せない</strong><br>「もっと安くすれば来てくれるかも」と値下げを続け、時間を削り続ける疲弊の日々が続く。</div>
+      </div>
+      <div class="danger-item">
+        <div class="danger-num">04</div>
+        <div class="danger-text"><strong>人生たった一度きりの時間が過ぎていく</strong><br>「いつか自分軸で生きたい」という夢を持ちながら、何も変わらないまま年齢だけが重なっていく。</div>
+      </div>
+    </div>
+    <div style="text-align:center; margin-top:40px;">
+      <a href="booking.html" class="cta-big">今すぐ変わる。無料相談を予約する →</a>
+    </div>
+  </div>
+</section>
+
+<!-- VOICE -->
+<section id="voice">
+  <div class="container">
+    <span class="sec-label">VOICE</span>
+    <h2 class="sec-title" style="text-align:center;">受講者の<em>変化</em></h2>
+    <div class="divider center"></div>
+    <div class="voice-cards">
+      <div class="voice-card">
+        <span class="voice-tag">ヒーラー / 30代女性</span>
+        <div class="voice-stars">★★★★★</div>
+        <div class="voice-text">資格を持っていたのに「自分なんかが高額を頂いていいのか」という気持ちが強くて全然動けませんでした。大将さんのセッションで自己価値の認識が変わり、自然と発信できるようになり、3ヶ月で念願の最初のクライアントを獲得できました。</div>
+        <div class="voice-author">A.M. さん（神奈川）</div>
+      </div>
+      <div class="voice-card">
+        <span class="voice-tag">NLP資格保有 / 40代女性</span>
+        <div class="voice-stars">★★★★★</div>
+        <div class="voice-text">「どうせ売れない」という思い込みが完全に消えました。ICAシートで理想のクライアントを明確にしてから、SNSへの発信が怖くなくなり、問い合わせが来るようになりました。自分軸で生きることの意味を初めて実感しています。</div>
+        <div class="voice-author">K.T. さん（東京）</div>
+      </div>
+      <div class="voice-card">
+        <span class="voice-tag">占い師 / 30代女性</span>
+        <div class="voice-stars">★★★★★</div>
+        <div class="voice-text">お金を受け取ることへの罪悪感が本当にひどくて、ずっと無料や格安でサービスを提供していました。大将さんのサポートで価値と価格を言語化でき、今は自分が相手にしたいお客様からしっかり頂けています。</div>
+        <div class="voice-author">R.S. さん（大阪）</div>
+      </div>
+    </div>
+    <div style="text-align:center; margin-top:36px;">
+      <a href="booking.html" class="cta-big">無料個別相談を予約する</a>
+    </div>
+  </div>
+</section>
+
+<!-- STORY -->
+<section id="story">
+  <div class="container">
+    <span class="sec-label">PROFILE</span>
+    <h2 class="sec-title">同じ壁を乗り越えた、<em>コーチより</em></h2>
+    <div class="divider"></div>
+    <div class="story-box">
+      <div>
+        <div class="story-photo"><img src="images/profile.jpg" alt="小松大将" style="width:100%;height:100%;object-fit:cover;object-position:top center;border-radius:50%;display:block;"></div>
+      </div>
+      <div>
+        <div class="story-name">小松 大将</div>
+        <div class="story-title">スキルマネタイズコーチ</div>
+        <div class="story-text">
+          様々なスキルや資格を積み重ねてきたけれど、単価が上げられず、集客業者に毎月150,000円を払い、耳ツボも加圧もすべて9,000円でやっていた時期がありました。<br><br>
+          「どうやって売ればいいのかわからない」「高い金額を提示することへの恐怖」——全部、自分自身が経験してきたことです。<br><br>
+          マネタイズできなかった本当の原因は、<strong>「自己価値がわかっていない」「お金に対する罪悪感」「理想の顧客の見つけ方がわからない」</strong>——この3つによって集客も発信も軸が定まらず、何をしていいかわからなくなっていたからです。<br><br>
+          その3つを整えた結果、今は時給33,000円〜55,000円、週5日・1日3時間以内で月80万売上を実現中。<br><br>
+          あなたが変われないのは、才能がないからじゃない。同じ壁に一緒に向き合いましょう。
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MENU -->
+<section id="menu">
+  <div class="container">
+    <span class="sec-label">MENU</span>
+    <h2 class="sec-title">ご提供<em>メニュー</em></h2>
+    <div class="divider"></div>
+    <div class="program-box">
+      <div class="program-name">スキルマネタイズスクール 3ヶ月コース</div>
+      <div class="program-desc">あなたの行動を抑制している原因を解消し、事業構築・集客動線まで、一貫してサポートする完全伴走プログラム。</div>
+      <div class="program-note">料金は無料相談でご案内します</div>
+      <div class="program-grid">
+
+        <div class="program-item">
+          <svg class="program-item-icon" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="36" height="36" rx="4" fill="currentColor" fill-opacity="0.08"/>
+            <path d="M18 8v2M18 26v2M8 18h2M26 18h2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+            <circle cx="18" cy="18" r="5" stroke="currentColor" stroke-width="1.8"/>
+          </svg>
+          <div class="program-item-title">潜在意識の書き換え個別セッション</div>
+          <div class="program-item-desc">月2回 × 3ヶ月 = 計6回<br>Zoom・マンツーマン</div>
+        </div>
+
+        <div class="program-item">
+          <svg class="program-item-icon" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="36" height="36" rx="4" fill="currentColor" fill-opacity="0.08"/>
+            <circle cx="18" cy="16" r="5" stroke="currentColor" stroke-width="1.8"/>
+            <path d="M10 27c0-4.418 3.582-8 8-8s8 3.582 8 8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+            <circle cx="26" cy="12" r="3" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          <div class="program-item-title">ICAシート</div>
+          <div class="program-item-desc">理想の顧客を徹底的に言語化。届けるべき相手が明確になる。</div>
+        </div>
+
+        <div class="program-item">
+          <svg class="program-item-icon" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="36" height="36" rx="4" fill="currentColor" fill-opacity="0.08"/>
+            <rect x="9" y="9" width="18" height="18" rx="2" stroke="currentColor" stroke-width="1.8"/>
+            <path d="M13 18h10M13 14h6M13 22h8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+          </svg>
+          <div class="program-item-title">オファーシート</div>
+          <div class="program-item-desc">サービスの価値と価格を言語化。自信を持って提示できる。</div>
+        </div>
+
+        <div class="program-item">
+          <svg class="program-item-icon" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="36" height="36" rx="4" fill="currentColor" fill-opacity="0.08"/>
+            <circle cx="18" cy="18" r="8" stroke="currentColor" stroke-width="1.8"/>
+            <path d="M15 14l7 4-7 4V14z" fill="currentColor"/>
+          </svg>
+          <div class="program-item-title">講義動画</div>
+          <div class="program-item-desc">自習コンテンツ。予習・復習に活用できる厳選コンテンツ。</div>
+        </div>
+
+        <div class="program-item">
+          <svg class="program-item-icon" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="36" height="36" rx="4" fill="currentColor" fill-opacity="0.08"/>
+            <rect x="8" y="10" width="20" height="14" rx="2" stroke="currentColor" stroke-width="1.8"/>
+            <path d="M12 24v2M24 24v2M10 14h16M10 18h10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+          <div class="program-item-title">専用HP構築一式</div>
+          <div class="program-item-desc">オリジナルHP、LP、予約サイト、予約管理システム、電子契約システムの構築一式。</div>
+        </div>
+
+        <div class="program-item">
+          <svg class="program-item-icon" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="36" height="36" rx="4" fill="currentColor" fill-opacity="0.08"/>
+            <path d="M10 26L14 12l4 8 4-6 4 12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <div class="program-item-title">SNS発信設計</div>
+          <div class="program-item-desc">発信軸・投稿の型・世界観設計で、理想客が集まる仕組みをつくる。</div>
+        </div>
+
+        <div class="program-item">
+          <svg class="program-item-icon" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="36" height="36" rx="4" fill="currentColor" fill-opacity="0.08"/>
+            <path d="M9 12h18a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2z" stroke="currentColor" stroke-width="1.8"/>
+            <path d="M13 17h4M13 20h8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+          <div class="program-item-title">DMサポート</div>
+          <div class="program-item-desc">日常の質問・壁打ちをDMで対応。迷った瞬間にすぐ相談できる。</div>
+        </div>
+
+      </div>
+      <div style="text-align:center;">
+        <a href="booking.html" class="cta-big" style="font-size:1rem;">料金を聞く・無料相談を予約 →</a>
+      </div>
+    </div>
+    <div class="free-card">
+      <div class="free-title">まずは無料個別相談（60分）から</div>
+      <div class="free-desc">
+        現状のヒアリングと方向性のご提案。<br>
+        あなたのスキルがどう収益化できるかを一緒に整理します。<br>
+        完全無料・勧誘なし・Zoom開催
+      </div>
+      <a href="booking.html" class="cta-big" style="font-size:1rem;">今すぐ予約する →</a>
+      <div style="font-size:0.8rem; color:#999; margin-top:12px;">平日10:00〜21:00 / 定員に達し次第締め切ります</div>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section id="finalcta">
+  <div class="container">
+    <span class="sec-label" style="color:rgba(255,255,255,0.7);">TAKE ACTION</span>
+    <h2 class="sec-title" style="color:var(--white);">人生たった一度きり。<br><em style="color:#fff176;">今日、動きましょう。</em></h2>
+    <p class="final-text">
+      あなたのスキルは、本物です。<br>
+      あなたの情熱は、本物です。<br>
+      あとは「自己価値の認識」「お金のブロック」「理想顧客の設計」を整えるだけ。<br>
+      まずは60分の無料相談から始めましょう。
+    </p>
+    <div class="cta-steps">
+      <div class="cta-step">
+        <div class="step-num">①</div>
+        <div class="step-text">無料相談を予約<br>（60分・Zoom）</div>
+      </div>
+      <div class="cta-step">
+        <div class="step-num">②</div>
+        <div class="step-text">現状と目標を<br>ヒアリング</div>
+      </div>
+      <div class="cta-step">
+        <div class="step-num">③</div>
+        <div class="step-text">方向性とプランを<br>ご提案</div>
+      </div>
+    </div>
+    <a href="booking.html" class="cta-big">無料個別相談を予約する（60分）</a>
+    <div class="cta-note" style="color:rgba(255,255,255,0.8); margin-top:14px;">完全無料・勧誘なし・平日10:00〜21:00</div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-brand">スキルマネタイズスクール | Na'au Noa</div>
+  <div style="margin-bottom:12px;">
+    <a href="https://instagram.com/daisuke_aloha_magician" target="_blank" style="color:rgba(255,255,255,0.6); font-size:0.85rem;">Instagram: @daisuke_aloha_magician</a>
+  </div>
+  <div class="footer-copy">© 2024 Na'au Noa 小松大将 All Rights Reserved.</div>
+</footer>
+
+<!-- STICKY CTA -->
+<div class="sticky-cta">
+  <a href="booking.html">無料個別相談を予約する（60分・完全無料）</a>
+</div>
+
+<script>
+  // Scroll animations
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.style.opacity = '1';
+        e.target.style.transform = 'translateY(0)';
+      }
+    });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.concern-row, .danger-item, .voice-card, .cta-step').forEach(el => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(16px)';
+    el.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+    observer.observe(el);
+  });
+  // Hide sticky CTA near bottom
+  window.addEventListener('scroll', () => {
+    const footer = document.querySelector('footer');
+    const sticky = document.querySelector('.sticky-cta');
+    const rect = footer.getBoundingClientRect();
+    sticky.style.display = rect.top < window.innerHeight ? 'none' : 'block';
+  });
+</script>
+</body>
+</html>
