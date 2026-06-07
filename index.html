@@ -202,28 +202,21 @@
   /* ===== SESSION ===== */
   #session { background: var(--white); }
   .ba-wrap {
+    display: grid; grid-template-columns: 1fr 48px 1fr;
     border: 1px solid var(--border); border-radius: 2px; overflow: hidden;
-    margin-bottom: 0;
   }
-  .ba-header {
-    display: grid; grid-template-columns: 1fr 56px 1fr;
-  }
+  .ba-block { display: flex; flex-direction: column; }
   .ba-head-cell {
     padding: 14px 28px; font-size: 0.72rem; font-weight: 700;
     letter-spacing: 0.2em; text-transform: uppercase;
   }
   .ba-head-cell.before { background: #f7f5f3; color: var(--text-light); }
   .ba-head-cell.after { background: var(--main); color: var(--white); }
-  .ba-head-arrow { background: var(--text); display: flex; align-items: center; justify-content: center; }
-  .ba-arrow-svg { width: 20px; height: 20px; }
-  .ba-body {
-    display: grid; grid-template-columns: 1fr 56px 1fr;
-  }
   .ba-col-before {
-    background: #f7f5f3; padding: 0 28px 32px;
+    background: #f7f5f3; padding: 0 28px 32px; flex: 1;
   }
   .ba-col-after {
-    background: #e8f7f7; padding: 0 28px 32px;
+    background: #e8f7f7; padding: 0 28px 32px; flex: 1;
   }
   .ba-big-label {
     font-size: 1rem; font-weight: 900; color: var(--text-light);
@@ -433,8 +426,9 @@
     .hamburger { display: flex; }
     section { padding: 64px 20px; }
     .why-box { padding: 32px 24px; }
-    .ba-header, .ba-body { grid-template-columns: 1fr; }
-    .ba-head-arrow, .ba-divider-col { display: none; }
+    .ba-wrap { grid-template-columns: 1fr; }
+    .ba-divider-col { display: none; }
+    .ba-block:first-child { border-bottom: 1px solid var(--border); }
     .ba-col-before, .ba-col-after { padding: 0 20px 24px; }
     .profile-grid { grid-template-columns: 1fr; }
     .profile-photo { max-width: 220px; }
@@ -597,16 +591,9 @@
     <h2 class="section-title">3ヶ月で起きる<em>変化</em></h2>
     <div class="section-divider"></div>
     <div class="ba-wrap">
-      <div class="ba-header">
+      <!-- BEFORE -->
+      <div class="ba-block">
         <div class="ba-head-cell before">Before — 今のあなた</div>
-        <div class="ba-head-arrow">
-          <svg class="ba-arrow-svg" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M5 12h14M12 5l7 7-7 7"/>
-          </svg>
-        </div>
-        <div class="ba-head-cell after">After — 3ヶ月後のあなた</div>
-      </div>
-      <div class="ba-body">
         <div class="ba-col-before">
           <div class="ba-big-label">スキルがあるだけで<br>事業化できていない</div>
           <ul class="ba-list before">
@@ -618,11 +605,16 @@
             <li>「趣味」で終わってしまう</li>
           </ul>
         </div>
-        <div class="ba-divider-col">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M5 12h14M12 5l7 7-7 7"/>
-          </svg>
-        </div>
+      </div>
+      <!-- ARROW -->
+      <div class="ba-divider-col">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M5 12h14M12 5l7 7-7 7"/>
+        </svg>
+      </div>
+      <!-- AFTER -->
+      <div class="ba-block">
+        <div class="ba-head-cell after">After — 3ヶ月後のあなた</div>
         <div class="ba-col-after">
           <div class="ba-big-label after">スキルによる変化を<br>販売・事業化</div>
           <ul class="ba-list after">
