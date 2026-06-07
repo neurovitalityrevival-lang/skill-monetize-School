@@ -1,4 +1,57 @@
 import { Resend } from 'resend';
+import crypto from 'crypto';
+import https from 'https';
+
+// ── Meta CAPI ──
+function sha256(str) {
+  return str ? crypto.createHash('sha256').update(str.trim().toLowerCase()).digest('hex') : null;
+}
+
+function sendCAPI({ name, email, phone, clientIp, userAgent, fbc, fbp, menu, sourceUrl }) {
+  const PID = '2080933312746435';
+  const AT  = 'EAAU7PbtGoZAIBReDwLpfbbo6AvazK5yqebVjLuEZCN2IKvNoh9Y4Gkbb2jrD9v2HWHpgUkKKJhZCvsba65MKnj3wLP1ZAzE5R7GKr8j4lwZBEcPcdC3FVGmLefu3HsjVV66Wf7EZCCRVi5M4SqM0HXlxPnHGz85zmmqpWUVNSBvS95wO3S1dASP3ag2vRPXkEa';
+  const ud = {};
+  if (email) ud.em = [sha256(email)];
+  if (phone) ud.ph = [sha256(phone.replace(/\D/g,''))];
+  if (name) {
+    const parts = name.trim().split(/\s+/);
+    ud.fn = [sha256(parts[0])];
+    if (parts.length > 1) ud.ln = [sha256(parts[parts.length - 1])];
+  }
+  if (clientIp)  ud.client_ip_address = clientIp;
+  if (userAgent) ud.client_user_agent = userAgent;
+  if (fbc) ud.fbc = fbc;
+  if (fbp) ud.fbp = fbp;
+
+  const payload = JSON.stringify({
+    data: [{
+      event_name: 'CompleteRegistration',
+      event_time: Math.floor(Date.now() / 1000),
+      event_id: `sms_reg_${Date.now()}`,
+      action_source: 'website',
+      event_source_url: sourceUrl || 'https://skill-monetize-school.vercel.app/booking.html',
+      user_data: ud,
+      custom_data: {
+        content_name: menu || 'スキルマネタイズスクール 無料相談',
+        content_category: 'skill-monetize',
+        currency: 'JPY',
+        value: 0
+      }
+    }]
+  });
+
+  return new Promise((resolve) => {
+    const req = https.request({
+      hostname: 'graph.facebook.com',
+      path: `/v19.0/${PID}/events?access_token=${AT}`,
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Content-Length': Buffer.byteLength(payload) }
+    }, (r) => { let d=''; r.on('data',c=>d+=c); r.on('end',()=>resolve(d)); });
+    req.on('error', (e) => { console.error('CAPI error:', e.message); resolve(null); });
+    req.write(payload);
+    req.end();
+  });
+}
 
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -7,7 +60,9 @@ export default async function handler(req, res) {
   if (req.method === 'OPTIONS') return res.status(200).end();
   if (req.method !== 'POST') return res.status(405).end();
 
-  const { slotId, name, email, phone, menu, message } = req.body;
+  const { slotId, name, email, phone, menu, message, sourceUrl, fbc, fbp } = req.body;
+  const clientIp = (req.headers['x-forwarded-for'] || '').split(',')[0].trim() || '';
+  const userAgent = req.headers['user-agent'] || '';
   const SUPABASE_URL = process.env.SUPABASE_URL;
   const SUPABASE_KEY = process.env.SUPABASE_ANON_KEY;
   const OWNER_EMAIL  = process.env['オーナーのメールアドレス'] || process.env.OWNER_EMAIL;
@@ -102,6 +157,13 @@ export default async function handler(req, res) {
 <p>ご不明な点は ${OWNER_EMAIL} までご連絡ください。</p>
 <p style="margin-top:24px;">${BRAND_NAME}<br>小松 大将</p>`
   });
+
+  // Meta CAPI（失敗しても予約は成功扱い）
+  try {
+    await sendCAPI({ name, email, phone, clientIp, userAgent, fbc, fbp, menu, sourceUrl });
+  } catch(e) {
+    console.error('CAPI送信エラー:', e.message);
+  }
 
   res.status(200).json({ success: true });
 }

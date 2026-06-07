@@ -4,6 +4,27 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>無料個別相談 予約 | スキルマネタイズスクール</title>
+
+<!-- Meta Pixel -->
+<script>
+!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s)}(window,document,'script',
+'https://connect.facebook.net/en_US/fbevents.js');
+fbq('init','2080933312746435');
+fbq('track','PageView');
+fbq('track','ViewContent',{
+  content_name: 'スキルマネタイズスクール 予約ページ',
+  content_category: 'skill-monetize'
+});
+</script>
+<noscript><img height="1" width="1" style="display:none"
+src="https://www.facebook.com/tr?id=2080933312746435&ev=PageView&noscript=1"/></noscript>
+<!-- End Meta Pixel -->
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;700;900&display=swap" rel="stylesheet">
 <style>
@@ -375,7 +396,9 @@ async function submitBooking() {
   const btn=document.getElementById('btn-sub');
   btn.disabled=true; btn.textContent='送信中…';
   try {
-    const r=await fetch('/api/create-booking',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({slotId:selSlotId,name,email,phone,menu:selMenuName,message:msg})});
+    // fbc / fbp をクッキーから取得
+    const getCookie = (n) => { const m = document.cookie.match('(^|;)\\s*'+n+'\\s*=\\s*([^;]+)'); return m ? m.pop() : ''; };
+    const r=await fetch('/api/create-booking',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({slotId:selSlotId,name,email,phone,menu:selMenuName,message:msg,sourceUrl:location.href,fbc:getCookie('_fbc'),fbp:getCookie('_fbp')})});
     const data=await r.json();
     if(!r.ok) throw new Error(data.error||'エラーが発生しました');
     document.querySelectorAll('.wrap>*:not(#doneBox)').forEach(el=>el.style.display='none');
@@ -384,6 +407,14 @@ async function submitBooking() {
     document.getElementById('doneText').innerHTML=`<strong>${name}</strong> 様<br><br>ご予約ありがとうございます。<br><br><strong>${dl} ${selTime}〜</strong>にてお待ちしております。<br><br>確認メールをお送りしました。<br><br>ご不明点はメールまたはInstagramのDMにてご連絡ください。`;
     document.getElementById('doneBox').style.display='block';
     window.scrollTo(0,0);
+    // Meta Pixel — 予約完了イベント
+    if (typeof fbq !== 'undefined') {
+      fbq('track', 'CompleteRegistration', {
+        content_name: selMenuName || 'スキルマネタイズスクール 無料相談',
+        content_category: 'skill-monetize',
+        status: 'booked'
+      });
+    }
   } catch(e) {
     errEl.textContent='※ '+e.message; errEl.classList.remove('hidden');
     btn.disabled=false; btn.textContent='予約を確定する →';

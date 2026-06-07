@@ -5,6 +5,27 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>【スキルマネタイズスクール】ヒーリング・NLP・占いで売れない…その理由と解決策 | 小松大将</title>
 <meta name="description" content="資格はあるのに売れない。そのブロックを3ヶ月で外し、理想のお客様からお金を頂ける自分へ。スキルマネタイズコーチ小松大将の無料個別相談はこちら。">
+
+<!-- Meta Pixel -->
+<script>
+!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s)}(window,document,'script',
+'https://connect.facebook.net/en_US/fbevents.js');
+fbq('init','2080933312746435');
+fbq('track','PageView');
+fbq('track','ViewContent',{
+  content_name: 'スキルマネタイズスクール LP',
+  content_category: 'skill-monetize'
+});
+</script>
+<noscript><img height="1" width="1" style="display:none"
+src="https://www.facebook.com/tr?id=2080933312746435&ev=PageView&noscript=1"/></noscript>
+<!-- End Meta Pixel -->
+
 <style>
   :root {
     --main: #4BBFBE;
@@ -564,6 +585,20 @@
     const rect = footer.getBoundingClientRect();
     sticky.style.display = rect.top < window.innerHeight ? 'none' : 'block';
   });
+</script>
+
+<script>
+// Meta Pixel — CTAクリック時にLeadイベント発火
+document.querySelectorAll('a[href="booking.html"]').forEach(function(btn) {
+  btn.addEventListener('click', function() {
+    if (typeof fbq !== 'undefined') {
+      fbq('track', 'Lead', {
+        content_name: 'スキルマネタイズスクール LP',
+        content_category: 'skill-monetize'
+      });
+    }
+  });
+});
 </script>
 </body>
 </html>
