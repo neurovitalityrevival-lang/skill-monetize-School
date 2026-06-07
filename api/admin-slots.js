@@ -32,7 +32,7 @@ export default async function handler(req, res) {
         rows.push({ date: d, start_time: t, is_available: !blocked, is_booked: !!blocked });
       }
     }
-    await fetch(`${SUPABASE_URL}/rest/v1/slots`, {
+    const supaRes = await fetch(`${SUPABASE_URL}/rest/v1/slots`, {
       method: 'POST',
       headers: {
         apikey: SUPABASE_KEY,
@@ -42,7 +42,11 @@ export default async function handler(req, res) {
       },
       body: JSON.stringify(rows)
     });
-    return res.status(200).json({ success: true });
+    if (!supaRes.ok) {
+      const errText = await supaRes.text();
+      return res.status(500).json({ error: errText });
+    }
+    return res.status(200).json({ success: true, count: rows.length });
   }
 
   if (req.method === 'PATCH') {

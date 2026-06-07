@@ -525,8 +525,11 @@ async function bulkAdd() {
   const times = getTimesInRange(from, to);
 
   if (!days.length) { toast('対象日がありません'); return; }
-  await fetch('/api/admin-slots',{method:'POST',headers:{'Content-Type':'application/json','X-Admin-Password':adminPw},body:JSON.stringify({dates:days,times})});
-  toast(`${days.length}日分の枠を追加しました`);
+  if (!times.length) { toast('時間帯の指定が正しくありません'); return; }
+  const r = await fetch('/api/admin-slots',{method:'POST',headers:{'Content-Type':'application/json','X-Admin-Password':adminPw},body:JSON.stringify({dates:days,times})});
+  const result = await r.json().catch(()=>({}));
+  if (result.error) { toast('⚠️ 追加失敗: ' + result.error.slice(0,60)); return; }
+  toast(`${days.length}日分・${times.length}枠ずつ追加しました`);
   await loadWeek();
 }
 
