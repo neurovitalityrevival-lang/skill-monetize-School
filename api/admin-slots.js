@@ -32,7 +32,7 @@ export default async function handler(req, res) {
         rows.push({ date: d, start_time: t, is_available: !blocked, is_booked: !!blocked });
       }
     }
-    const supaRes = await fetch(`${SUPABASE_URL}/rest/v1/slots`, {
+    const supaRes = await fetch(`${SUPABASE_URL}/rest/v1/slots?on_conflict=date,start_time`, {
       method: 'POST',
       headers: {
         apikey: SUPABASE_KEY,

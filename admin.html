@@ -526,11 +526,20 @@ async function bulkAdd() {
 
   if (!days.length) { toast('対象日がありません'); return; }
   if (!times.length) { toast('時間帯の指定が正しくありません'); return; }
-  const r = await fetch('/api/admin-slots',{method:'POST',headers:{'Content-Type':'application/json','X-Admin-Password':adminPw},body:JSON.stringify({dates:days,times})});
-  const result = await r.json().catch(()=>({}));
-  if (result.error) { toast('⚠️ 追加失敗: ' + result.error.slice(0,60)); return; }
-  toast(`${days.length}日分・${times.length}枠ずつ追加しました`);
-  await loadWeek();
+  try {
+    toast(`送信中… ${days.length}日 × ${times.length}枠`);
+    const r = await fetch('/api/admin-slots',{method:'POST',headers:{'Content-Type':'application/json','X-Admin-Password':adminPw},body:JSON.stringify({dates:days,times})});
+    const result = await r.json().catch(()=>({}));
+    if (result.error) {
+      const msg = typeof result.error === 'string' ? result.error : JSON.stringify(result.error);
+      toast('⚠️ Supabaseエラー: ' + msg.slice(0,80));
+      return;
+    }
+    toast(`✅ ${days.length}日分・${times.length}枠ずつ追加しました`);
+    await loadWeek();
+  } catch(e) {
+    toast('⚠️ 通信エラー: ' + e.message.slice(0,60));
+  }
 }
 
 async function bulkDel() {
@@ -592,7 +601,7 @@ function toast(msg) {
   const el = document.getElementById('toast');
   el.textContent = msg;
   el.classList.add('show');
-  setTimeout(()=>el.classList.remove('show'),2500);
+  setTimeout(()=>el.classList.remove('show'),4000);
 }
 </script>
 </body>
