@@ -10,8 +10,8 @@ export default async function handler(req, res) {
   const { slotId, name, email, phone, menu, message } = req.body;
   const SUPABASE_URL = process.env.SUPABASE_URL;
   const SUPABASE_KEY = process.env.SUPABASE_ANON_KEY;
-  const OWNER_EMAIL  = process.env.OWNER_EMAIL;
-  const ZOOM_URL     = process.env.ZOOM_URL;
+  const OWNER_EMAIL  = process.env['オーナーのメールアドレス'] || process.env.OWNER_EMAIL;
+  const ZOOM_URL     = process.env['ズームURL'] || process.env.ZOOM_URL;
   const BRAND_NAME   = process.env.BRAND_NAME || 'スキルマネタイズスクール';
 
   // スロット確認
