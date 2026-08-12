@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>無料個別相談 予約 | スキルマネタイズスクール</title>
+<title>ご予約 | THE SHIFT</title>
 
 <!-- Meta Pixel -->
 <script>
@@ -17,8 +17,8 @@ s.parentNode.insertBefore(t,s)}(window,document,'script',
 fbq('init','2080933312746435');
 fbq('track','PageView');
 fbq('track','ViewContent',{
-  content_name: 'スキルマネタイズスクール 予約ページ',
-  content_category: 'skill-monetize'
+  content_name: 'THE SHIFT 予約ページ',
+  content_category: 'the-shift'
 });
 </script>
 <noscript><img height="1" width="1" style="display:none"
@@ -137,8 +137,8 @@ header { background:var(--deep); color:var(--cream); padding:14px 20px; text-ali
 <body>
 
 <header>
-  <div class="header-brand">SKILL MONETIZE SCHOOL</div>
-  <div class="header-title">無料個別相談 ご予約</div>
+  <div class="header-brand">THE SHIFT</div>
+  <div class="header-title">ご予約</div>
 </header>
 
 <div class="wrap">
@@ -156,30 +156,23 @@ header { background:var(--deep); color:var(--cream); padding:14px 20px; text-ali
       <div class="card-sub">選択後にカレンダーで日時をお選びいただけます</div>
 
       <div class="menu-opt" data-key="無料個別相談" onclick="selMenu(this)">
-        <div class="menu-opt-title">🎁 無料個別相談</div>
-        <div class="menu-opt-detail">60分 / 完全無料 / Zoom（全国対応）</div>
+        <div class="menu-opt-title">🎁 無料オンライン個別相談</div>
+        <div class="menu-opt-detail">60分 / 完全無料 / Zoom（全国対応）— 現状ヒアリング・THE SHIFT への方向性をご提案</div>
         <div class="menu-opt-price">無料</div>
         <span class="menu-check">✓</span>
       </div>
 
-      <div class="menu-opt" data-key="体験セッション" onclick="selMenu(this)">
-        <div class="menu-opt-title">✨ 体験セッション</div>
-        <div class="menu-opt-detail">60分 / Zoom（全国対応）</div>
-        <div class="menu-opt-price">料金は個別にご案内</div>
+      <div class="menu-opt" data-key="初回限定リリースワーク33000" onclick="selMenu(this)">
+        <div class="menu-opt-title">🌀 初回限定パーソナルリリースワーク</div>
+        <div class="menu-opt-detail">60分 / ¥33,000（税込）/ Zoom — RW後3日以内にコミュニティ入会をご案内</div>
+        <div class="menu-opt-price">¥33,000</div>
         <span class="menu-check">✓</span>
       </div>
 
-      <div class="menu-opt" data-key="個別コーチングセッション" onclick="selMenu(this)">
-        <div class="menu-opt-title">⚡ 個別コーチングセッション<span class="badge">スクール受講生</span></div>
-        <div class="menu-opt-detail">60分 / Zoom（全国対応）</div>
-        <div class="menu-opt-price">料金は個別にご案内</div>
-        <span class="menu-check">✓</span>
-      </div>
-
-      <div class="menu-opt" data-key="フォローアップセッション" onclick="selMenu(this)">
-        <div class="menu-opt-title">🌿 フォローアップセッション</div>
-        <div class="menu-opt-detail">30分 / Zoom（全国対応）</div>
-        <div class="menu-opt-price">料金は個別にご案内</div>
+      <div class="menu-opt" data-key="リリースワーク55000" onclick="selMenu(this)">
+        <div class="menu-opt-title">⚡ パーソナルリリースワーク（都度）</div>
+        <div class="menu-opt-detail">60分 / ¥55,000（税込）/ Zoom — 過渡期の個別セッション</div>
+        <div class="menu-opt-price">¥55,000</div>
         <span class="menu-check">✓</span>
       </div>
     </div>
@@ -410,7 +403,7 @@ async function submitBooking() {
     // Meta Pixel — 予約完了イベント
     if (typeof fbq !== 'undefined') {
       fbq('track', 'CompleteRegistration', {
-        content_name: selMenuName || 'スキルマネタイズスクール 無料相談',
+        content_name: selMenuName || 'THE SHIFT 予約',
         content_category: 'skill-monetize',
         status: 'booked'
       });
