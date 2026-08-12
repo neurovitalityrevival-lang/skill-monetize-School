@@ -26,23 +26,26 @@ src="https://www.facebook.com/tr?id=2080933312746435&ev=PageView&noscript=1"/></
 <!-- End Meta Pixel -->
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;700;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond&family=Noto+Sans+JP:wght@400;500&display=swap" rel="stylesheet">
 <style>
 :root {
-  --deep:  #2C2420;
-  --amber: #3AAEAC;
-  --gold:  #D9714E;
-  --cream: #FAFAF8;
-  --bg:    #F4F0EB;
-  --border: #ddd;
-  --muted: #888;
+  --deep:  #2C3531;
+  --sage:  #4A6B5D;
+  --accent:#E8985E;
+  --sage:  #4A6B5D;
+  --amber: var(--sage);
+  --gold:  var(--accent);
+  --cream: #F7F5F0;
+  --bg:    #F7F5F0;
+  --border: rgba(74,107,93,.2);
+  --muted: #5a6560;
 }
 * { margin:0; padding:0; box-sizing:border-box; }
-body { font-family:'Noto Serif JP', serif; background:var(--bg); color:var(--deep); line-height:1.7; }
+body { font-family:'Noto Sans JP','Hiragino Sans',sans-serif; background:var(--bg); color:var(--deep); line-height:1.7; font-weight:400; }
 
-header { background:var(--deep); color:var(--cream); padding:14px 20px; text-align:center; }
-.header-brand { font-size:0.72rem; letter-spacing:0.2em; color:var(--amber); margin-bottom:3px; }
-.header-title { font-size:1rem; font-weight:700; }
+header { background:var(--sage); color:var(--cream); padding:14px 20px; text-align:center; }
+.header-brand { font-family:'Cormorant Garamond',serif; font-size:0.85rem; letter-spacing:0.22em; margin-bottom:3px; }
+.header-title { font-size:0.82rem; font-weight:400; letter-spacing:0.1em; opacity:.9; }
 
 .wrap { max-width:680px; margin:0 auto; padding:28px 16px 80px; }
 
@@ -156,21 +159,21 @@ header { background:var(--deep); color:var(--cream); padding:14px 20px; text-ali
       <div class="card-sub">選択後にカレンダーで日時をお選びいただけます</div>
 
       <div class="menu-opt" data-key="無料個別相談" onclick="selMenu(this)">
-        <div class="menu-opt-title">🎁 無料オンライン個別相談</div>
-        <div class="menu-opt-detail">60分 / 完全無料 / Zoom（全国対応）— 現状ヒアリング・THE SHIFT への方向性をご提案</div>
+        <div class="menu-opt-title">無料オンライン個別相談</div>
+        <div class="menu-opt-detail">60分 / 完全無料 / Zoom（全国対応）— 現状ヒアリング・方向性のご提案</div>
         <div class="menu-opt-price">無料</div>
         <span class="menu-check">✓</span>
       </div>
 
       <div class="menu-opt" data-key="初回限定リリースワーク33000" onclick="selMenu(this)">
-        <div class="menu-opt-title">🌀 初回限定パーソナルリリースワーク</div>
+        <div class="menu-opt-title">初回限定パーソナルリリースワーク</div>
         <div class="menu-opt-detail">60分 / ¥33,000（税込）/ Zoom — RW後3日以内にコミュニティ入会をご案内</div>
         <div class="menu-opt-price">¥33,000</div>
         <span class="menu-check">✓</span>
       </div>
 
       <div class="menu-opt" data-key="リリースワーク55000" onclick="selMenu(this)">
-        <div class="menu-opt-title">⚡ パーソナルリリースワーク（都度）</div>
+        <div class="menu-opt-title">パーソナルリリースワーク（都度）</div>
         <div class="menu-opt-detail">60分 / ¥55,000（税込）/ Zoom — 過渡期の個別セッション</div>
         <div class="menu-opt-price">¥55,000</div>
         <span class="menu-check">✓</span>
