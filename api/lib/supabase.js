@@ -1,4 +1,4 @@
-export function getSupabaseConfig() {
+function getSupabaseConfig() {
   const url = process.env.SUPABASE_URL;
   const key =
     process.env.SUPABASE_SERVICE_ROLE_KEY ||
@@ -14,7 +14,7 @@ export function getSupabaseConfig() {
   return { url, key };
 }
 
-export async function supabaseFetch(path, options = {}) {
+async function supabaseFetch(path, options = {}) {
   const { url, key } = getSupabaseConfig();
   const res = await fetch(`${url}${path}`, {
     ...options,
@@ -37,10 +37,12 @@ export async function supabaseFetch(path, options = {}) {
   return { ok: res.ok, status: res.status, data };
 }
 
-export function handleApiError(res, error) {
+function handleApiError(res, error) {
   console.error(error);
   if (error.code === 'ENV_MISSING') {
     return res.status(503).json({ error: error.message });
   }
-  return res.status(500).json({ error: 'サーバーエラーが発生しました' });
+  return res.status(500).json({ error: error.message || 'サーバーエラーが発生しました' });
 }
+
+module.exports = { getSupabaseConfig, supabaseFetch, handleApiError };
