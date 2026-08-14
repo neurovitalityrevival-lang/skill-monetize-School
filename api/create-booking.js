@@ -60,14 +60,20 @@ export default async function handler(req, res) {
   if (req.method === 'OPTIONS') return res.status(200).end();
   if (req.method !== 'POST') return res.status(405).end();
 
+  try {
   const { slotId, name, email, phone, menu, message, sourceUrl, fbc, fbp } = req.body;
   const clientIp = (req.headers['x-forwarded-for'] || '').split(',')[0].trim() || '';
   const userAgent = req.headers['user-agent'] || '';
   const SUPABASE_URL = process.env.SUPABASE_URL;
-  const SUPABASE_KEY = process.env.SUPABASE_ANON_KEY;
+  const SUPABASE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SECRET_KEY || process.env.SUPABASE_ANON_KEY;
+  if (!SUPABASE_URL || !SUPABASE_KEY) {
+    return res.status(503).json({ error: 'SUPABASE_URL と API キーが Vercel 環境変数に設定されていません' });
+  }
+
   const OWNER_EMAIL  = process.env['オーナーのメールアドレス'] || process.env.OWNER_EMAIL;
   const ZOOM_URL     = process.env['ズームURL'] || process.env.ZOOM_URL;
-  const BRAND_NAME   = process.env.BRAND_NAME || 'スキルマネタイズスクール';
+  const BRAND_NAME   = process.env.BRAND_NAME || 'THE SHIFT';
+  const OWNER_NAME   = process.env.OWNER_NAME || '中川裕幸';
 
   // スロット確認
   const slotRes = await fetch(
@@ -155,7 +161,7 @@ export default async function handler(req, res) {
 <p><a href="${ZOOM_URL}">${ZOOM_URL}</a></p>
 <p>セッション当日は5分前までにZoomにご入室ください。</p>
 <p>ご不明な点は ${OWNER_EMAIL} までご連絡ください。</p>
-<p style="margin-top:24px;">${BRAND_NAME}<br>小松 大将</p>`
+<p style="margin-top:24px;">${BRAND_NAME}<br>${OWNER_NAME}</p>`
   });
 
   // Meta CAPI（失敗しても予約は成功扱い）
@@ -166,4 +172,8 @@ export default async function handler(req, res) {
   }
 
   res.status(200).json({ success: true });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: error.message || '予約処理中にエラーが発生しました' });
+  }
 }

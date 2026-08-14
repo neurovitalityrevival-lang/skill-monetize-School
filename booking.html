@@ -274,10 +274,19 @@ async function loadCal(y, m) {
   slotsMap = {};
   try {
     const r = await fetch(`/api/get-slots?year=${y}&month=${m}`);
-    const arr = await r.json();
-    arr.forEach(s => { if(!slotsMap[s.date]) slotsMap[s.date]=[]; slotsMap[s.date].push(s); });
+    const data = await r.json();
+    if (!r.ok) {
+      throw new Error(data.error || '空き枠の取得に失敗しました');
+    }
+    if (!Array.isArray(data)) {
+      throw new Error('空き枠データの形式が正しくありません');
+    }
+    data.forEach(s => { if(!slotsMap[s.date]) slotsMap[s.date]=[]; slotsMap[s.date].push(s); });
     msg.textContent = '空きのある日付をクリックしてください';
-  } catch(e) { msg.textContent = '読み込みに失敗しました。再読込してください。'; }
+  } catch(e) {
+    msg.textContent = '読み込みに失敗しました。しばらくしてから再読込してください。';
+    console.error(e);
+  }
   const lbl = new Date(y, m-1, 1).toLocaleDateString('ja-JP',{year:'numeric',month:'long'});
   document.getElementById('cal-lbl').textContent = lbl;
   drawCal(y, m);

@@ -1,39 +1,59 @@
+import { getSupabaseConfig, handleApiError, supabaseFetch } from './_lib/supabase.js';
+
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  if (req.method === 'OPTIONS') return res.status(200).end();
   if (req.method !== 'GET') return res.status(405).end();
 
-  const { year, month } = req.query;
-  const SUPABASE_URL = process.env.SUPABASE_URL;
-  const SUPABASE_KEY = process.env.SUPABASE_ANON_KEY;
+  try {
+    getSupabaseConfig();
 
-  const startDate = `${year}-${String(month).padStart(2, '0')}-01`;
-  const endDate = new Date(year, month, 0).toISOString().split('T')[0];
+    const { year, month } = req.query;
+    if (!year || !month) {
+      return res.status(400).json({ error: 'year and month are required' });
+    }
 
-  const slotsRes = await fetch(
-    `${SUPABASE_URL}/rest/v1/slots?date=gte.${startDate}&date=lte.${endDate}&order=date,start_time`,
-    { headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}` } }
-  );
-  const slots = await slotsRes.json();
+    const y = parseInt(year, 10);
+    const m = parseInt(month, 10);
+    const start = `${y}-${String(m).padStart(2, '0')}-01`;
+    const nm = m === 12 ? 1 : m + 1;
+    const ny = m === 12 ? y + 1 : y;
+    const end = `${ny}-${String(nm).padStart(2, '0')}-01`;
 
-  const settingsRes = await fetch(
-    `${SUPABASE_URL}/rest/v1/admin_settings?key=eq.daily_capacity_mins`,
-    { headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}` } }
-  );
-  const settings = await settingsRes.json();
-  const maxMins = parseInt(settings[0]?.value || '180');
+    const [availableRes, bookedRes, settingsRes] = await Promise.all([
+      supabaseFetch(
+        `/rest/v1/slots?date=gte.${start}&date=lt.${end}&is_available=eq.true&is_booked=eq.false&order=date,start_time`
+      ),
+      supabaseFetch(`/rest/v1/slots?date=gte.${start}&date=lt.${end}&is_booked=eq.true`),
+      supabaseFetch('/rest/v1/admin_settings?key=eq.daily_capacity_mins'),
+    ]);
 
-  const bookedByDate = {};
-  slots.filter(s => s.is_booked).forEach(s => {
-    bookedByDate[s.date] = (bookedByDate[s.date] || 0) + 15;
-  });
+    if (!availableRes.ok) {
+      return res.status(502).json({ error: '空き枠の取得に失敗しました', detail: availableRes.data });
+    }
 
-  const available = slots.filter(s => {
-    if (!s.is_available || s.is_booked) return false;
-    if ((bookedByDate[s.date] || 0) >= maxMins) return false;
-    const hour = parseInt(s.start_time.split(':')[0]);
-    if (hour >= 22) return false;
-    return true;
-  });
+    const availableData = Array.isArray(availableRes.data) ? availableRes.data : [];
+    const bookedData = Array.isArray(bookedRes.data) ? bookedRes.data : [];
+    const settingsData = Array.isArray(settingsRes.data) ? settingsRes.data : [];
 
-  res.status(200).json(available);
+    let dailyCapacityMins = 180;
+    if (settingsData.length > 0) {
+      dailyCapacityMins = parseInt(settingsData[0].value, 10) || 180;
+    }
+
+    const bookedMinsPerDay = {};
+    bookedData.forEach((s) => {
+      bookedMinsPerDay[s.date] = (bookedMinsPerDay[s.date] || 0) + 15;
+    });
+
+    const filtered = availableData
+      .filter((s) => s.start_time.substring(0, 5) < '22:00')
+      .filter((s) => (bookedMinsPerDay[s.date] || 0) < dailyCapacityMins);
+
+    return res.status(200).json(filtered);
+  } catch (error) {
+    return handleApiError(res, error);
+  }
 }
