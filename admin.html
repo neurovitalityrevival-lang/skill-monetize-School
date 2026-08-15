@@ -335,6 +335,10 @@ async function loadWeek() {
       const [y,m] = ym.split('-');
       const r = await fetch(`/api/admin-slots?year=${y}&month=${m}`,{headers:{'X-Admin-Password':adminPw}});
       const slots = await r.json();
+      if (!Array.isArray(slots)) {
+        toast('⚠️ 枠データの取得に失敗しました');
+        return;
+      }
       slots.forEach(s => { if(!tlData[s.date]) tlData[s.date]=[]; tlData[s.date].push(s); });
     }
   } catch(e) { toast('⚠️ 枠データ読み込み失敗（環境変数を確認してください）'); }
@@ -476,6 +480,20 @@ async function applyManualBook() {
   await loadWeek();
 }
 
+async function deleteSlotIds(ids, force = false) {
+  const r = await fetch('/api/admin-slots', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'X-Admin-Password': adminPw },
+    body: JSON.stringify({ action: 'bulk_delete', ids, force }),
+  });
+  const result = await r.json().catch(() => ({}));
+  if (!r.ok) {
+    const msg = typeof result.error === 'string' ? result.error : '削除に失敗しました';
+    throw new Error(msg);
+  }
+  return result.deleted ?? ids.length;
+}
+
 async function applyDel() {
   const keys = getSelByMode('del');
   const ids = keys.map(k=>{
@@ -483,9 +501,13 @@ async function applyDel() {
     return cell?.dataset.slotid;
   }).filter(Boolean);
   if(!ids.length){toast('削除対象が見つかりません');return;}
-  await fetch(`/api/admin-slots?ids=${ids.join(',')}`, {method:'DELETE',headers:{'X-Admin-Password':adminPw}});
-  toast('削除しました');
-  clearSel(); await loadWeek();
+  try {
+    const n = await deleteSlotIds(ids, false);
+    toast(`${n}枠を削除しました`);
+    clearSel(); await loadWeek();
+  } catch(e) {
+    toast('⚠️ ' + e.message);
+  }
 }
 async function applyFDel() {
   if(!confirm('予約済みの枠も含めて削除します。よろしいですか？')) return;
@@ -495,9 +517,13 @@ async function applyFDel() {
     return cell?.dataset.slotid;
   }).filter(Boolean);
   if(!ids.length){toast('削除対象が見つかりません');return;}
-  await fetch(`/api/admin-slots?ids=${ids.join(',')}&force=true`, {method:'DELETE',headers:{'X-Admin-Password':adminPw}});
-  toast('強制削除しました');
-  clearSel(); await loadWeek();
+  try {
+    const n = await deleteSlotIds(ids, true);
+    toast(`${n}枠を強制削除しました`);
+    clearSel(); await loadWeek();
+  } catch(e) {
+    toast('⚠️ ' + e.message);
+  }
 }
 
 function groupByDate(keys) {
@@ -527,38 +553,58 @@ async function bulkAdd() {
   if (!days.length) { toast('対象日がありません'); return; }
   if (!times.length) { toast('時間帯の指定が正しくありません'); return; }
   try {
+    const DATE_BATCH = 5;
+    let totalInserted = 0;
     toast(`送信中… ${days.length}日 × ${times.length}枠`);
-    const r = await fetch('/api/admin-slots',{method:'POST',headers:{'Content-Type':'application/json','X-Admin-Password':adminPw},body:JSON.stringify({dates:days,times})});
-    const result = await r.json().catch(()=>({}));
-    if (result.error) {
-      const msg = typeof result.error === 'string' ? result.error : JSON.stringify(result.error);
-      toast('⚠️ Supabaseエラー: ' + msg.slice(0,80));
-      return;
+    for (let i = 0; i < days.length; i += DATE_BATCH) {
+      const batch = days.slice(i, i + DATE_BATCH);
+      const r = await fetch('/api/admin-slots', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'X-Admin-Password': adminPw },
+        body: JSON.stringify({ dates: batch, times }),
+      });
+      const result = await r.json().catch(() => ({}));
+      if (!r.ok || result.error) {
+        const msg = typeof result.error === 'string' ? result.error : JSON.stringify(result.error || result);
+        toast(`⚠️ 追加失敗（${totalInserted}枠まで反映）: ${msg.slice(0, 80)}`);
+        await loadWeek();
+        return;
+      }
+      totalInserted += result.count ?? batch.length * times.length;
     }
-    toast(`✅ ${days.length}日分・${times.length}枠ずつ追加しました`);
+    toast(`✅ ${days.length}日分・${times.length}枠ずつ追加しました（計${totalInserted}枠）`);
     await loadWeek();
   } catch(e) {
-    toast('⚠️ 通信エラー: ' + e.message.slice(0,60));
+    toast('⚠️ 通信エラー: ' + e.message.slice(0, 60));
+    await loadWeek();
   }
 }
 
 async function bulkDel() {
   const ym = document.getElementById('bulkMonth').value;
   if(!ym){alert('対象月を選択してください');return;}
-  if(!confirm('対象月の選択曜日・時間帯の未予約枠を一括削除します。よろしいですか？')) return;
   const dows = [...document.querySelectorAll('.dow:checked')].map(c=>parseInt(c.value));
+  if(!dows.length){alert('曜日を選択してください');return;}
   const from = document.getElementById('bulkFrom').value;
   const to   = document.getElementById('bulkTo').value;
+  if(!from||!to){alert('時間帯を入力してください');return;}
+  if(!confirm('対象月の選択曜日・時間帯の未予約枠を一括削除します。よろしいですか？')) return;
   const [y,m] = ym.split('-').map(Number);
   const r = await fetch(`/api/admin-slots?year=${y}&month=${m}`,{headers:{'X-Admin-Password':adminPw}});
   const slots = await r.json();
+  if (!Array.isArray(slots)) { toast('⚠️ 枠データの取得に失敗しました'); return; }
   const days = new Set(getDaysOfMonth(y,m,dows));
   const times = new Set(getTimesInRange(from,to));
   const ids = slots.filter(s=>!s.is_booked && days.has(s.date) && times.has(s.start_time.slice(0,5))).map(s=>s.id);
   if(!ids.length){toast('削除対象が見つかりません');return;}
-  await fetch(`/api/admin-slots?ids=${ids.join(',')}`,{method:'DELETE',headers:{'X-Admin-Password':adminPw}});
-  toast(`${ids.length}枠を削除しました`);
-  await loadWeek();
+  try {
+    const n = await deleteSlotIds(ids, false);
+    toast(`${n}枠を削除しました`);
+    await loadWeek();
+  } catch(e) {
+    toast('⚠️ ' + e.message);
+    await loadWeek();
+  }
 }
 
 function getDaysOfMonth(y, m, dows) {
