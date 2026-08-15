@@ -42,10 +42,74 @@ body{font-family:var(--sans);background:var(--sand);color:var(--text);line-heigh
 .logo-en{font-family:var(--display);font-size:1.15rem;letter-spacing:.28em;color:var(--text);font-weight:600}
 .logo-sub{font-size:.58rem;letter-spacing:.34em;color:var(--text-l);margin-top:5px}
 .header-cta{
-  font-size:.72rem;letter-spacing:.16em;text-decoration:none;color:var(--text);
-  border-bottom:1px solid var(--text);padding-bottom:2px;transition:opacity .2s;
+  position:relative;display:inline-flex;align-items:center;justify-content:center;
+  padding:13px 26px;font-size:.7rem;letter-spacing:.16em;font-weight:500;
+  text-decoration:none;color:var(--white);white-space:nowrap;
+  background:linear-gradient(120deg,var(--sage) 0%,#3d5a4d 45%,var(--accent) 100%);
+  background-size:220% 220%;border-radius:2px;overflow:hidden;
+  box-shadow:0 4px 22px rgba(74,107,93,.38),inset 0 1px 0 rgba(255,255,255,.12);
+  animation:ctaPulse 3.2s ease-in-out infinite,ctaGradient 7s ease infinite;
+  transition:transform .4s cubic-bezier(.22,1,.36,1),box-shadow .4s;
 }
-.header-cta:hover{opacity:.6}
+.header-cta::before{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(105deg,transparent 35%,rgba(255,255,255,.28) 50%,transparent 65%);
+  transform:translateX(-120%);animation:ctaShine 4.5s ease-in-out infinite;
+}
+.header-cta::after{
+  content:'';position:absolute;inset:-1px;border-radius:2px;
+  border:1px solid rgba(212,175,55,.35);pointer-events:none;
+  animation:ctaBorder 3.2s ease-in-out infinite;
+}
+.header-cta:hover{
+  transform:translateY(-2px) scale(1.03);
+  box-shadow:0 10px 36px rgba(232,152,94,.45),0 0 24px rgba(212,175,55,.18);
+}
+.header-cta-text{position:relative;z-index:1}
+@keyframes ctaPulse{
+  0%,100%{box-shadow:0 4px 22px rgba(74,107,93,.38),inset 0 1px 0 rgba(255,255,255,.12)}
+  50%{box-shadow:0 6px 30px rgba(232,152,94,.42),0 0 18px rgba(212,175,55,.12),inset 0 1px 0 rgba(255,255,255,.12)}
+}
+@keyframes ctaGradient{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
+@keyframes ctaShine{0%,65%,100%{transform:translateX(-120%)}80%{transform:translateX(120%)}}
+@keyframes ctaBorder{0%,100%{border-color:rgba(212,175,55,.25)}50%{border-color:rgba(232,152,94,.55)}}
+
+/* ── SCROLL REVEAL ── */
+.reveal,.reveal-left,.reveal-right,.hero-reveal{
+  opacity:0;will-change:opacity,transform,filter;
+  transition:opacity 1.15s cubic-bezier(.22,1,.36,1),
+             transform 1.15s cubic-bezier(.22,1,.36,1),
+             filter 1.15s cubic-bezier(.22,1,.36,1);
+}
+.reveal,.hero-reveal{transform:translateY(40px);filter:blur(6px)}
+.reveal-left{transform:translateX(-48px);filter:blur(4px)}
+.reveal-right{transform:translateX(48px);filter:blur(4px)}
+.reveal.is-visible,.reveal-left.is-visible,.reveal-right.is-visible,.hero-reveal.is-visible{
+  opacity:1;transform:none;filter:blur(0);
+}
+.reveal-stagger>*{
+  opacity:0;transform:translateY(32px);
+  transition:opacity .95s cubic-bezier(.22,1,.36,1),transform .95s cubic-bezier(.22,1,.36,1);
+}
+.reveal-stagger.is-visible>*{opacity:1;transform:translateY(0)}
+.reveal-stagger.is-visible>*:nth-child(1){transition-delay:.05s}
+.reveal-stagger.is-visible>*:nth-child(2){transition-delay:.15s}
+.reveal-stagger.is-visible>*:nth-child(3){transition-delay:.25s}
+.reveal-stagger.is-visible>*:nth-child(4){transition-delay:.35s}
+.reveal-stagger.is-visible>*:nth-child(5){transition-delay:.45s}
+.reveal-stagger.is-visible>*:nth-child(6){transition-delay:.65s}
+.reveal-stagger.is-visible>*:nth-child(7){transition-delay:.75s}
+.reveal-stagger.is-visible>*:nth-child(8){transition-delay:.85s}
+.reveal-delay-1{transition-delay:.12s!important}
+.reveal-delay-2{transition-delay:.24s!important}
+.reveal-delay-3{transition-delay:.36s!important}
+@media(prefers-reduced-motion:reduce){
+  .reveal,.reveal-left,.reveal-right,.hero-reveal,.reveal-stagger>*{
+    opacity:1!important;transform:none!important;filter:none!important;transition:none!important;
+  }
+  .header-cta{animation:none}
+  .header-cta::before,.header-cta::after{animation:none}
+}
 
 /* ── TYPOGRAPHY ── */
 .section-num{font-family:var(--display);font-size:.72rem;letter-spacing:.38em;color:var(--accent);margin-bottom:20px;display:block}
@@ -229,6 +293,7 @@ section{padding:100px 40px}
   .split,.plans-grid,.begin-steps,.domains,.voices-grid{grid-template-columns:1fr}
   .split.reverse .split-text,.split.reverse .split-visual{order:unset}
   .site-header{padding:16px 24px}
+  .header-cta{padding:11px 16px;font-size:.62rem;letter-spacing:.12em}
   .compare-row{grid-template-columns:1fr;gap:8px;text-align:center}
   .compare-arrow{transform:rotate(90deg)}
 }
@@ -241,18 +306,18 @@ section{padding:100px 40px}
     <div class="logo-en">THE SHIFT</div>
     <div class="logo-sub">BREAKTHROUGH COMMUNITY — NAKAGAWA HIROYUKI</div>
   </a>
-  <a href="booking.html" class="header-cta">無料個別相談を予約</a>
+  <a href="booking.html" class="header-cta"><span class="header-cta-text">無料個別相談を予約</span></a>
 </header>
 
 <!-- HERO -->
 <section class="hero" style="padding:0">
   <div class="hero-copy">
-    <p class="hero-tag">会員制ブレイクスループログラム</p>
-    <h1>こんなままじゃ、<br>終われない。</h1>
-    <p class="hero-catch">思考・感情・身体の「詰まり」を一瞬で解き放ち、<br>魂レベルで人生を飛躍させる</p>
-    <a href="booking.html" class="cta-primary">まずはこちらから｜無料個別相談を予約する（簡単60秒）</a>
+    <p class="hero-tag hero-reveal">会員制ブレイクスループログラム</p>
+    <h1 class="hero-reveal reveal-delay-1">こんなままじゃ、<br>終われない。</h1>
+    <p class="hero-catch hero-reveal reveal-delay-2">思考・感情・身体の「詰まり」を一瞬で解き放ち、<br>魂レベルで人生を飛躍させる</p>
+    <a href="booking.html" class="cta-primary hero-reveal reveal-delay-3">まずはこちらから｜無料個別相談を予約する（簡単60秒）</a>
   </div>
-  <div class="hero-visual">
+  <div class="hero-visual hero-reveal reveal-delay-2">
     <div class="photo photo-hero" aria-label="中川裕幸 メインビジュアル（準備中）"></div>
   </div>
 </section>
@@ -260,12 +325,12 @@ section{padding:100px 40px}
 <!-- 2. フック＆共感 -->
 <section class="bg-white">
   <div class="wrap-wide split">
-    <div class="split-text">
+    <div class="split-text reveal-left">
       <h2 class="section-title">今から、あなたがずっと探していた<br>「答え」の話をします。</h2>
       <p class="body-text">いろんな講座や学びに投資をして、自分の停滞や限界を越えようと必死に頑張ってきたはずです。</p>
       <p class="body-text">だけど、現実は動かないどころかもっと迷子になって、いつの間にか周りで成功する人を見て焦り、平気なフリをして、自分が何をやりたいのかわからなくなって、孤独になって、<strong>感情も身体もビジネスも動かなくなっていませんか？</strong></p>
     </div>
-    <div class="split-visual">
+    <div class="split-visual reveal-right">
       <div class="photo photo-tall" aria-label="セクション画像（準備中）"></div>
     </div>
   </div>
@@ -273,7 +338,7 @@ section{padding:100px 40px}
 
 <!-- 3. 再定義＆選ばれし者 -->
 <section class="bg-tint">
-  <div class="wrap">
+  <div class="wrap reveal">
     <h2 class="section-title">そんな経験をしているあなただからこそ、<br>この世界を美しく照らす<br>強い光になれる。</h2>
     <p class="body-text">大きなことを成し遂げる運命の人は、例外なくこの経験をしています。</p>
     <p class="body-text">なぜそんなことが分かるのか。それは僕がこれまでずっと経営者さんや1000人規模の組織のリーダーたちをサポートし、彼らが爆発的に売上も組織も飛躍していく姿をすぐそばで見続けてきたからです。</p>
@@ -285,9 +350,9 @@ section{padding:100px 40px}
 <!-- お客様のお声と変化（仮置き） -->
 <section class="bg-white">
   <div class="wrap-wide">
-    <h2 class="section-title">お客様のお声と変化</h2>
-    <p class="body-text" style="margin-bottom:0">THE SHIFT に参加された方の、リアルな変化の記録。（準備中）</p>
-    <div class="voices-grid">
+    <h2 class="section-title reveal">お客様のお声と変化</h2>
+    <p class="body-text reveal reveal-delay-1" style="margin-bottom:0">THE SHIFT に参加された方の、リアルな変化の記録。（準備中）</p>
+    <div class="voices-grid reveal-stagger">
       <article class="voice-card">
         <div class="photo photo-square" aria-label="お客様の声 1（準備中）"></div>
         <p class="voice-meta">VOICE 01 — 準備中</p>
@@ -313,7 +378,7 @@ section{padding:100px 40px}
 <!-- 4. プロフィール＆ストーリー -->
 <section>
   <div class="wrap-wide split reverse">
-    <div class="split-text">
+    <div class="split-text reveal-left">
       <div class="profile-header">
         <div class="profile-name-en">HIROYUKI NAKAGAWA</div>
         <div class="profile-name">中川 裕幸</div>
@@ -336,7 +401,7 @@ section{padding:100px 40px}
         </ul>
       </div>
     </div>
-    <div class="split-visual">
+    <div class="split-visual reveal-right">
       <div class="photo photo-tall" aria-label="中川裕幸 プロフィール写真（準備中）"></div>
     </div>
   </div>
@@ -344,7 +409,7 @@ section{padding:100px 40px}
 
 <!-- 5. 解決策 -->
 <section class="bg-white">
-  <div class="wrap">
+  <div class="wrap reveal">
     <h2 class="section-title">THE SHIFT とは —<br>3ヶ月の環境再設計プログラム</h2>
     <p class="body-text">スピリチュアルコミュニティでも、癒しの場でも、人脈会でもない。<strong>停滞している人が、良い人・良い場・良い視点に触れて、流れを変える体験</strong> — それが THE SHIFT です。</p>
     <div class="chain">
@@ -361,8 +426,8 @@ section{padding:100px 40px}
 <!-- 6. メソッド -->
 <section class="bg-tint">
   <div class="wrap">
-    <h2 class="section-title">プログラムで行うのは、<br>この5つだけ。</h2>
-    <div class="method-list">
+    <h2 class="section-title reveal">プログラムで行うのは、<br>この5つだけ。</h2>
+    <div class="method-list reveal-stagger">
       <div class="method-item"><div class="method-num">01</div><div><h3>身体からのメッセージを翻訳する</h3><p>ビリーフ（思い込み）をポロっと落とす、パーソナルリリースワーク 60分×3回。</p></div></div>
       <div class="method-item"><div class="method-num">02</div><div><h3>潜在意識の詰まりを一瞬で解除する</h3><p>あなたの才能開花を阻害する潜在意識にある思い込み、信念、観念を一瞬でリリース</p></div></div>
       <div class="method-item"><div class="method-num">03</div><div><h3>クリアな環境へ移る</h3><p>素敵でクリアなメンバーだけが集う、選抜制コミュニティへご招待。</p></div></div>
@@ -375,7 +440,7 @@ section{padding:100px 40px}
 <!-- 8. 参加の流れ -->
 <section class="bg-white">
   <div class="wrap-wide split">
-    <div class="split-text">
+    <div class="split-text reveal-left">
       <h2 class="section-title">はじまりは、<br>購入ではなく対話から。</h2>
       <ol class="session-steps">
         <li>無料個別相談 or ウェビナー — 現在地とテーマを整理</li>
@@ -385,7 +450,7 @@ section{padding:100px 40px}
       </ol>
       <a href="booking.html" class="cta-primary">無料個別相談を予約する（簡単60秒）</a>
     </div>
-    <div class="split-visual">
+    <div class="split-visual reveal-right">
       <div class="photo photo-tall" aria-label="セクション画像（準備中）"></div>
     </div>
   </div>
@@ -394,8 +459,8 @@ section{padding:100px 40px}
 <!-- 10. FAQ -->
 <section class="bg-white">
   <div class="wrap">
-    <h2 class="section-title">よくあるご質問</h2>
-    <div class="faq-list">
+    <h2 class="section-title reveal">よくあるご質問</h2>
+    <div class="faq-list reveal-stagger">
       <div class="faq-item">
         <h3>まだ目標が明確でなくても相談できますか？</h3>
         <p>はい。「何をやりたいかわからない」という状態こそ、まず身体の詰まりを解くべきサインです。曖昧な感覚を言葉にするところから始められます。</p>
@@ -422,11 +487,13 @@ section{padding:100px 40px}
 
 <!-- 11. 最終CTA -->
 <section class="final-cta">
+  <div class="reveal">
   <h2 class="section-title">こんなままじゃ、<br>終われない。</h2>
   <p>あなたの中にある本当の力は、<br>もう、止められない。</p>
   <p style="margin-top:16px">まずは60秒。無料個別相談で、<br>あなたの詰まりを一緒に見つけましょう。</p>
   <a href="booking.html" class="cta-primary" style="background:var(--accent);margin-top:36px">まずはこちらから｜無料個別相談を予約する（簡単60秒）</a>
   <span class="btn-sub" style="color:rgba(255,255,255,.5);margin-top:16px">才能発掘スペシャリスト・中川裕幸が、直接お話を伺います。</span>
+  </div>
 </section>
 
 <footer class="site-footer">
@@ -438,5 +505,34 @@ section{padding:100px 40px}
   <p style="margin-top:16px;opacity:.6">© 2026 THE SHIFT — All Rights Reserved</p>
 </footer>
 
+<script>
+(function(){
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const targets = document.querySelectorAll('.reveal,.reveal-left,.reveal-right,.reveal-stagger,.hero-reveal');
+
+  if (reduced) {
+    targets.forEach(el => el.classList.add('is-visible'));
+    return;
+  }
+
+  requestAnimationFrame(() => {
+    document.querySelectorAll('.hero-reveal').forEach((el, i) => {
+      setTimeout(() => el.classList.add('is-visible'), 180 + i * 140);
+    });
+  });
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (!entry.isIntersecting) return;
+      entry.target.classList.add('is-visible');
+      observer.unobserve(entry.target);
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -48px 0px' });
+
+  document.querySelectorAll('.reveal,.reveal-left,.reveal-right,.reveal-stagger').forEach(el => {
+    observer.observe(el);
+  });
+})();
+</script>
 </body>
 </html>
