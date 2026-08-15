@@ -13,6 +13,23 @@ module.exports = async (req, res) => {
     return res.status(400).json({ error: '必須項目が不足しています' });
   }
 
+  const BRAND_NAME = process.env.BRAND_NAME || 'THE SHIFT';
+  const OWNER_NAME = process.env.OWNER_NAME || '中川裕幸';
+  const NOTIFY_EMAIL =
+    process.env.CONTRACT_NOTIFY_EMAIL ||
+    process.env['オーナーのメールアドレス'] ||
+    process.env.OWNER_EMAIL ||
+    'komaka.nakagawa@gmail.com';
+
+  const gmailUser = process.env.GMAIL_USER;
+  const gmailPass = process.env.GMAIL_APP_PASSWORD;
+
+  if (!gmailUser || !gmailPass) {
+    return res.status(503).json({
+      error: 'GMAIL_USER / GMAIL_APP_PASSWORD が Vercel 環境変数に設定されていません',
+    });
+  }
+
   try {
     const clientIp = req.headers['x-forwarded-for']?.split(',')[0]?.trim() || '';
     const dateStr = new Date(agreedAt || Date.now()).toLocaleString('ja-JP', {
@@ -21,28 +38,26 @@ module.exports = async (req, res) => {
       hour: '2-digit', minute: '2-digit',
     });
 
-    const gmailUser = process.env.GMAIL_USER || 'neuro.vitality.revival@gmail.com';
-    const gmailPass = process.env.GMAIL_APP_PASSWORD || 'hpjhneugdbybxplq';
     const transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: { user: gmailUser, pass: gmailPass },
     });
 
-    // 署名画像 → Buffer
     const base64Data = signatureData.replace(/^data:image\/png;base64,/, '');
     const sigBuffer = Buffer.from(base64Data, 'base64');
 
-    const program = programType || 'パニック障害改善コーチングプログラム（3ヶ月）';
+    const program = programType || `${BRAND_NAME} コミュニティ入会`;
 
     // ── クライアント宛確認メール ──
     await transporter.sendMail({
-      from: `"Na'au Noa" <${gmailUser}>`,
+      from: `"${BRAND_NAME}" <${gmailUser}>`,
       to: email,
-      subject: `【Na'au Noa】${program} 契約書への電子署名を受け付けました`,
+      subject: `【${BRAND_NAME}】${program} 契約書への電子署名を受け付けました`,
       html: `
         <div style="font-family:sans-serif;max-width:600px;margin:0 auto;background:#faf8f5;border-radius:12px;overflow:hidden;">
           <div style="background:#1a3a3a;padding:28px 32px;text-align:center;">
-            <p style="color:#b8976a;font-size:1.2rem;letter-spacing:0.1em;margin:0;">Na'au Noa</p>
+            <p style="color:#b8976a;font-size:1.2rem;letter-spacing:0.12em;margin:0 0 4px;">${BRAND_NAME}</p>
+            <p style="color:#c8b89a;font-size:0.82rem;margin:0;">${OWNER_NAME}</p>
           </div>
           <div style="padding:32px;">
             <h2 style="color:#1a3a3a;font-size:1.1rem;margin-bottom:20px;">電子署名が完了しました</h2>
@@ -69,14 +84,11 @@ module.exports = async (req, res) => {
             </div>
 
             <div style="background:#fff8e8;border-left:4px solid #b8976a;border-radius:4px;padding:14px 18px;margin-bottom:24px;font-size:0.85rem;color:#7a5c2a;line-height:1.9;">
-              ご不明な点がございましたら、お気軽にご連絡ください。<br>
-              📞 <a href="tel:07091974336" style="color:#b8976a;">070-9197-4336</a>
+              ご不明な点がございましたら、Instagram の DM またはメールにてお気軽にご連絡ください。
             </div>
 
             <div style="padding-top:20px;border-top:1px solid #e0d8cc;color:#888;font-size:0.82rem;line-height:1.8;">
-              Na'au Noa　代表 小松 大将<br>
-              神奈川県茅ヶ崎市中海岸1-1-46<br>
-              TEL: 070-9197-4336
+              ${BRAND_NAME}　${OWNER_NAME}
             </div>
           </div>
         </div>
@@ -91,14 +103,15 @@ module.exports = async (req, res) => {
       ],
     });
 
-    // ── 小松さん宛通知メール ──
+    // ── 運営宛通知メール（中田さん） ──
     await transporter.sendMail({
-      from: `"Na'au Noa System" <${gmailUser}>`,
-      to: gmailUser,
+      from: `"${BRAND_NAME} System" <${gmailUser}>`,
+      to: NOTIFY_EMAIL,
       subject: `【契約署名】${name} 様が署名しました（${program}）`,
       html: `
         <div style="font-family:sans-serif;max-width:600px;margin:0 auto;">
           <h2 style="color:#1a3a3a;border-bottom:2px solid #b8976a;padding-bottom:8px;">新しい契約署名が届きました</h2>
+          <p style="color:#888;font-size:0.85rem;margin-bottom:16px;">${BRAND_NAME} / ${OWNER_NAME}</p>
           <table style="border-collapse:collapse;width:100%;font-size:0.9rem;margin-bottom:20px;">
             <tr><td style="padding:10px 14px;background:#f0ebe3;font-weight:bold;width:30%;border-bottom:1px solid #e0d8cc;">署名日時</td><td style="padding:10px 14px;border-bottom:1px solid #eee;">${dateStr}</td></tr>
             <tr><td style="padding:10px 14px;background:#f0ebe3;font-weight:bold;border-bottom:1px solid #e0d8cc;">プログラム</td><td style="padding:10px 14px;border-bottom:1px solid #eee;"><strong>${program}</strong></td></tr>
@@ -124,7 +137,7 @@ module.exports = async (req, res) => {
 
     return res.status(200).json({ success: true });
 
-  } catch(e) {
+  } catch (e) {
     console.error('sign-contract-coaching error:', e);
     return res.status(500).json({ error: e.message || 'メール送信に失敗しました' });
   }
